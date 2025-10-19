@@ -14,29 +14,281 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap"
         rel="stylesheet">
-    <!-- MDB -->
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.min.css" rel="stylesheet" />
+    <!-- Bootstrap 5 -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
+    <!-- Custom CSS -->
+    <style>
+        :root {
+            /* Updated color scheme from dark to light with blue accent */
+            --primary-color: #ffffff;
+            --secondary-color: #f8f9fa;
+            --accent-color: #1e40af;
+            --text-light: #1f2937;
+            --text-muted: #6b7280;
+            --border-color: #e5e7eb;
+        }
+
+        * {
+            font-family: 'Roboto', sans-serif;
+        }
+
+        body {
+            background-color: #f8f9fa;
+        }
+
+        /* Navbar styling - light background with blue accent */
+        .navbar {
+            background: var(--primary-color);
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+            padding: 0.75rem 0;
+            border-bottom: 2px solid var(--accent-color);
+        }
+
+        .navbar-brand {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-color) !important;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-brand:hover {
+            color: #1e3a8a !important;
+            transform: scale(1.05);
+        }
+
+        .navbar-brand img {
+            height: 30px;
+            transition: transform 0.3s ease;
+        }
+
+        .navbar-brand img:hover {
+            transform: rotate(5deg);
+        }
+
+        /* Navigation links styling - dark text with blue hover */
+        .navbar-nav .nav-link {
+            color: var(--text-light) !important;
+            font-weight: 500;
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem !important;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .navbar-nav .nav-link:hover {
+            color: var(--accent-color) !important;
+            background-color: rgba(30, 64, 175, 0.08);
+            transform: translateY(-2px);
+        }
+
+        .navbar-nav .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            width: 0;
+            height: 2px;
+            background-color: var(--accent-color);
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+        }
+
+        .navbar-nav .nav-link:hover::after {
+            width: 80%;
+        }
+
+        /* Search bar styling - light background */
+        .search-container {
+            position: relative;
+            margin: 0 1rem;
+        }
+
+        .search-input {
+            background-color: var(--secondary-color);
+            border: 1px solid var(--border-color);
+            color: var(--text-light);
+            padding: 0.5rem 1rem;
+            border-radius: 25px;
+            width: 250px;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+
+        .search-input::placeholder {
+            color: var(--text-muted);
+        }
+
+        .search-input:focus {
+            outline: none;
+            background-color: #ffffff;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(30, 64, 175, 0.2);
+        }
+
+        .search-icon {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .search-input:focus~.search-icon {
+            color: var(--accent-color);
+        }
+
+        /* Dropdown menu styling - light background */
+        .dropdown-menu {
+            background-color: #ffffff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dropdown-item {
+            color: var(--text-light);
+            padding: 0.75rem 1.5rem;
+            transition: all 0.3s ease;
+            border-left: 3px solid transparent;
+        }
+
+        .dropdown-item:hover {
+            background-color: rgba(30, 64, 175, 0.08);
+            color: var(--accent-color);
+            border-left-color: var(--accent-color);
+            padding-left: 1.8rem;
+        }
+
+        /* Avatar styling - blue border */
+        .avatar-container {
+            position: relative;
+        }
+
+        .avatar-img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-color);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .avatar-img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(30, 64, 175, 0.3);
+        }
+
+        /* Hamburger menu styling */
+        .navbar-toggler {
+            border: none;
+            color: var(--text-light);
+            font-size: 1.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .navbar-toggler:focus {
+            box-shadow: none;
+            outline: 2px solid var(--accent-color);
+            outline-offset: 2px;
+        }
+
+        .navbar-toggler:hover {
+            color: var(--accent-color);
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 991px) {
+            .search-input {
+                width: 100%;
+                margin: 0.5rem 0;
+            }
+
+            .navbar-nav {
+                margin-top: 1rem;
+            }
+
+            .navbar-nav .nav-link {
+                padding: 0.75rem 0 !important;
+                border-radius: 0;
+            }
+
+            .navbar-nav .nav-link::after {
+                display: none;
+            }
+
+            .navbar-nav .nav-link:hover::after {
+                display: none;
+            }
+
+            .d-flex {
+                flex-direction: column;
+            }
+
+            .search-container {
+                margin: 0.5rem 0;
+            }
+        }
+
+        /* Right elements container */
+        .navbar-right-elements {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        @media (max-width: 991px) {
+            .navbar-right-elements {
+                flex-direction: column;
+                align-items: flex-start;
+                width: 100%;
+                margin-top: 1rem;
+                padding-top: 1rem;
+                border-top: 1px solid var(--border-color);
+            }
+
+            .search-container {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 
 <body>
     <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+    <nav class="navbar navbar-expand-lg">
         <!-- Container wrapper -->
         <div class="container-fluid">
+            <!-- Navbar brand -->
+            <a class="navbar-brand" href="#">
+                <i class="fas fa-newspaper"></i> menit.com
+            </a>
+
             <!-- Toggle button -->
-            <button data-mdb-collapse-init class="navbar-toggler" type="button"
-                data-mdb-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
                 aria-label="Toggle navigation">
                 <i class="fas fa-bars"></i>
             </button>
 
             <!-- Collapsible wrapper -->
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <!-- Navbar brand -->
-                <a class="navbar-brand mt-2 mt-lg-0" href="#">
-                    <img src="https://mdbcdn.b-cdn.net/img/logo/mdb-transaprent-noshadows.webp" height="15"
-                        alt="MDB Logo" loading="lazy" />
-                </a>
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
@@ -49,59 +301,84 @@
                         <a class="nav-link" href="#">Tiket</a>
                     </li>
                 </ul>
+
                 <!-- Right elements -->
-                <div class="d-flex align-items-center">
-                    <!-- Notifications -->
-                    <div class="dropdown">
-                        <div class="input-group rounded">
-                            <input type="search" class="form-control rounded" placeholder="Search"
-                                aria-label="Search" aria-describedby="search-addon" />
-                            <span class="input-group-text border-0" id="search-addon">
-                                <i class="fas fa-search"></i>
-                            </span>
-                        </div>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
-                            <li><a class="dropdown-item" href="#">Some news</a></li>
-                            <li><a class="dropdown-item" href="#">Another news</a></li>
-                            <li><a class="dropdown-item" href="#">Something else here</a></li>
-                        </ul>
+                <div class="navbar-right-elements">
+                    <!-- Search Bar - Only show for non-admin users -->
+                    <!-- @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
+-->
+                    <div class="search-container">
+                        <input type="search" class="search-input" placeholder="Cari berita..." aria-label="Search"
+                            aria-describedby="search-addon" />
+                        <i class="fas fa-search search-icon"></i>
                     </div>
-                    <!-- Avatar -->
+                    <!--
+@endif -->
+
+                    <!-- Avatar Dropdown -->
                     <div class="dropdown">
-                        <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow"
-                            href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false">
+                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
-                                height="25" alt="User Profile" loading="lazy" />
+                                height="40" width="40" alt="User Profile" loading="lazy">
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuAvatar">
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                             @if (Auth::check())
-                                <li><a class="dropdown-item" href="#">My profile</a></li>
-                                <li><a class="dropdown-item" href="{{ route('logout') }}">Logout</a></li>
+                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
+                                        Saya</a></li>
+                                <li><a class="dropdown-item" href="#"><i
+                                            class="fas fa-cog me-2"></i>Pengaturan</a></li>
+                                <li>
+                                    <hr class="dropdown-divider">
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="{{ route('logout') }}">
+                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                    </a>
+                                </li>
                             @else
-                                <li><a class="dropdown-item" href="{{ route('login') }}">Login</a></li>
-                                <li><a class="dropdown-item" href="{{ route('signup') }}">Signup</a></li>
+                                <li><a class="dropdown-item" href="{{ route('login') }}"><i
+                                            class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                                <li><a class="dropdown-item" href="{{ route('signup') }}"><i
+                                            class="fas fa-user-plus me-2"></i>Daftar</a></li>
                             @endif
                         </ul>
                     </div>
                 </div>
                 <!-- Right elements -->
             </div>
-            <!-- Container wrapper -->
+            <!-- Collapsible wrapper -->
         </div>
+        <!-- Container wrapper -->
     </nav>
     <!-- Navbar -->
+
+    {{-- <div class="container mt-4">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @if (session('logout'))
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                {{ session('logout') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+        @yield('content')
+    </div> --}}
+
     @yield('content')
 
-    {{-- CDN --}}
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"
-        integrity="sha384-7+zCNj/IqJ95wo16oMtfsKbZ9ccEh31eOz1HGyDuCQ6wgnyJNSYdrPa03rtR1zdB" crossorigin="anonymous">
-    </script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.min.js"
-        integrity="sha384-QJHtvGhmr9XOIpI6YVutG+2QOK9T+ZnN4kzFN1RtK3zEFEIsxhlmWl5/YESvpZ13" crossorigin="anonymous">
-    </script>
-    <!-- MDB -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/9.1.0/mdb.umd.min.js"></script>
-    @stack('script')
+    <!-- Bootstrap JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
