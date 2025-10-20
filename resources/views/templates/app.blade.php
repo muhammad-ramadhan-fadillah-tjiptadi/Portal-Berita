@@ -17,12 +17,15 @@
     <!-- Bootstrap 5 -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet" />
     <!-- Custom CSS -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <style>
         :root {
             /* Updated color scheme from dark to light with blue accent */
             --primary-color: #ffffff;
             --secondary-color: #f8f9fa;
-            --accent-color: #1e40af;
+            --accent-color: #0da2e7;
             --text-light: #1f2937;
             --text-muted: #6b7280;
             --border-color: #e5e7eb;
@@ -41,7 +44,6 @@
             background: var(--primary-color);
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             padding: 0.75rem 0;
-            border-bottom: 2px solid var(--accent-color);
         }
 
         .navbar-brand {
@@ -53,7 +55,7 @@
         }
 
         .navbar-brand:hover {
-            color: #1e3a8a !important;
+            color: #0da2e7 !important;
             transform: scale(1.05);
         }
 
@@ -276,7 +278,7 @@
         <!-- Container wrapper -->
         <div class="container-fluid">
             <!-- Navbar brand -->
-            <a class="navbar-brand" href="#">
+            <a class="navbar-brand" href="{{ route('home')  }}">
                 <i class="fas fa-newspaper"></i> menit.com
             </a>
 
@@ -292,13 +294,10 @@
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item">
-                        <a class="nav-link" href="#">Beranda</a>
+                        <a class="nav-link" href="{{ route('home') }}">Beranda</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#">Bioskop</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Tiket</a>
                     </li>
                 </ul>
 
