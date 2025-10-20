@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Models\Categorie;
 use Illuminate\Http\Request;
 
 class PostController extends Controller
@@ -12,7 +13,19 @@ class PostController extends Controller
      */
     public function index()
     {
-        //
+        $categories = Categorie::all();
+        $posts = Post::with('category')->latest()->paginate(6);
+        return view('home', compact('posts', 'categories'));
+    }
+
+    /**
+     * Display posts by category.
+     */
+    public function byCategory(Categorie $category)
+    {
+        $categories = Categorie::all();
+        $posts = $category->posts()->with('category')->latest()->paginate(6);
+        return view('home', compact('posts', 'categories', 'category'));
     }
 
     /**

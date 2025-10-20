@@ -2,10 +2,13 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\PostController;
+use App\Models\Categorie;
 
-Route::get('/', function () {
-    return view('home');
-})->name('home');
+Route::get('/', [PostController::class, 'index'])->name('home');
+
+// Category route
+Route::get('/category/{category:slug}', [PostController::class, 'byCategory'])->name('category.posts');
 
 Route::get('/login', function () {
     return view('auth.login');

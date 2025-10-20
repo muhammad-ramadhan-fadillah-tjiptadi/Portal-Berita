@@ -19,4 +19,12 @@ class Post extends Model
         'image',
         'status',
     ];
+
+    /**
+     * Get the category that owns the post.
+     */
+    public function category()
+    {
+        return $this->belongsTo(Categorie::class, 'category_id');
+    }
 }

@@ -278,7 +278,7 @@
         <!-- Container wrapper -->
         <div class="container-fluid">
             <!-- Navbar brand -->
-            <a class="navbar-brand" href="{{ route('home')  }}">
+            <a class="navbar-brand" href="{{ route('home') }}">
                 <i class="fas fa-newspaper"></i> menit.com
             </a>
 
@@ -293,12 +293,57 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <!-- Left links -->
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <li class="nav-item">
-                        <a class="nav-link" href="{{ route('home') }}">Beranda</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="#">Bioskop</a>
-                    </li>
+                    @auth
+                        @if (Auth::user()->role === 'admin')
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('admin/dashboard*') ? 'active' : '' }}"
+                                    href="{{ route('admin.dashboard') }}" style="border-bottom: 2px solid transparent;">
+                                    <i class="fas fa-tachometer-alt me-1"></i> Dashboard
+                                </a>
+                            </li>
+                            <!-- Admin Navigation -->
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fas fa-layer-group me-1"></i> Kelola Kategori
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="#">
+                                    <i class="fas fa-sitemap me-1"></i> Kelola Sub Kategori
+                                </a>
+                            </li>
+                        @else
+                            <!-- Regular User Navigation -->
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">
+                                    <i class="fas fa-home me-1"></i> Beranda
+                                </a>
+                            </li>
+                            @foreach (\App\Models\Categorie::orderBy('name')->get() as $navCategory)
+                                <li class="nav-item">
+                                    <a class="nav-link {{ isset($category) && $category->id === $navCategory->id ? 'active' : '' }}"
+                                        href="{{ route('category.posts', $navCategory->slug) }}">
+                                        {{ $navCategory->name }}
+                                    </a>
+                                </li>
+                            @endforeach
+                        @endif
+                    @else
+                        <!-- Guest Navigation -->
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->is('/') ? 'active' : '' }}" href="{{ route('home') }}">
+                                <i class="fas fa-home me-1"></i> Beranda
+                            </a>
+                        </li>
+                        @foreach (\App\Models\Categorie::orderBy('name')->get() as $navCategory)
+                            <li class="nav-item">
+                                <a class="nav-link {{ isset($category) && $category->id === $navCategory->id ? 'active' : '' }}"
+                                    href="{{ route('category.posts', $navCategory->slug) }}">
+                                    {{ $navCategory->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    @endauth
                 </ul>
 
                 <!-- Right elements -->
@@ -327,6 +372,8 @@
                                         Saya</a></li>
                                 <li><a class="dropdown-item" href="#"><i
                                             class="fas fa-cog me-2"></i>Pengaturan</a></li>
+                                <li><a class="dropdown-item" href="#"><i
+                                            class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
