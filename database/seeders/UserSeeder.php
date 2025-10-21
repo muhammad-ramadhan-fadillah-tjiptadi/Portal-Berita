@@ -18,8 +18,10 @@ class UserSeeder extends Seeder
             ['email' => 'admin@gmail.com'],
             [
                 'name' => 'Administrator',
+                'email_verified_at' => now(),
                 'password' => Hash::make('AdminID'),
-                'role' => 'admin'
+                'role' => 'admin',
+                'remember_token' => \Illuminate\Support\Str::random(10),
             ]
         );
     }

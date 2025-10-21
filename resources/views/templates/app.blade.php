@@ -61,44 +61,22 @@
 
         .navbar-brand img {
             height: 30px;
-            transition: transform 0.3s ease;
         }
 
-        .navbar-brand img:hover {
-            transform: rotate(5deg);
-        }
-
-        /* Navigation links styling - dark text with blue hover */
+        /* Navigation links styling - dark text without hover effect */
         .navbar-nav .nav-link {
             color: var(--text-light) !important;
             font-weight: 500;
             margin: 0 0.5rem;
             padding: 0.5rem 1rem !important;
             border-radius: 5px;
-            transition: all 0.3s ease;
             position: relative;
         }
 
-        .navbar-nav .nav-link:hover {
+        /* Active link styling */
+        .navbar-nav .nav-link.active {
             color: var(--accent-color) !important;
-            background-color: rgba(30, 64, 175, 0.08);
-            transform: translateY(-2px);
-        }
-
-        .navbar-nav .nav-link::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            width: 0;
-            height: 2px;
-            background-color: var(--accent-color);
-            transition: all 0.3s ease;
-            transform: translateX(-50%);
-        }
-
-        .navbar-nav .nav-link:hover::after {
-            width: 80%;
+            font-weight: 600;
         }
 
         /* Search bar styling - light background */
@@ -114,7 +92,6 @@
             padding: 0.5rem 1rem;
             border-radius: 25px;
             width: 250px;
-            transition: all 0.3s ease;
             font-size: 0.9rem;
         }
 
@@ -124,9 +101,7 @@
 
         .search-input:focus {
             outline: none;
-            background-color: #ffffff;
             border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(30, 64, 175, 0.2);
         }
 
         .search-icon {
@@ -135,10 +110,13 @@
             top: 50%;
             transform: translateY(-50%);
             color: var(--text-muted);
-            cursor: pointer;
-            transition: color 0.3s ease;
         }
 
+        .search-input:focus {
+            outline: none;
+            border-color: var(--accent-color);
+        }
+        
         .search-input:focus~.search-icon {
             color: var(--accent-color);
         }
@@ -167,15 +145,12 @@
         .dropdown-item {
             color: var(--text-light);
             padding: 0.75rem 1.5rem;
-            transition: all 0.3s ease;
             border-left: 3px solid transparent;
         }
 
-        .dropdown-item:hover {
+        .dropdown-item:active {
             background-color: rgba(30, 64, 175, 0.08);
             color: var(--accent-color);
-            border-left-color: var(--accent-color);
-            padding-left: 1.8rem;
         }
 
         /* Avatar styling - blue border */
@@ -372,8 +347,10 @@
                                         Saya</a></li>
                                 <li><a class="dropdown-item" href="#"><i
                                             class="fas fa-cog me-2"></i>Pengaturan</a></li>
+                                @if (Auth::user()->role === 'user')
                                 <li><a class="dropdown-item" href="#"><i
                                             class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
+                                @endif
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>
