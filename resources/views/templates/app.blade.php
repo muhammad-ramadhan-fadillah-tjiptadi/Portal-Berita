@@ -116,7 +116,7 @@
             outline: none;
             border-color: var(--accent-color);
         }
-        
+
         .search-input:focus~.search-icon {
             color: var(--accent-color);
         }
@@ -345,12 +345,14 @@
                             @if (Auth::check())
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
                                         Saya</a></li>
+                                @if (Auth::user()->role === 'user')
+                                <li><a class="dropdown-item" href="{{ route('posts.create') }}"><i
+                                            class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
+                                <li><a class="dropdown-item" href="{{ route('posts.drafts') }}"><i
+                                            class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>
+                                @endif
                                 <li><a class="dropdown-item" href="#"><i
                                             class="fas fa-cog me-2"></i>Pengaturan</a></li>
-                                @if (Auth::user()->role === 'user')
-                                <li><a class="dropdown-item" href="#"><i
-                                            class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
-                                @endif
                                 <li>
                                     <hr class="dropdown-divider">
                                 </li>

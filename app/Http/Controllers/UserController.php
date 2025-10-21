@@ -75,7 +75,7 @@ class UserController extends Controller
             if (Auth::user()->role == 'admin') {
                 return redirect()->route('admin.dashboard')->with('success', 'Berhasil Login!');
             } elseif (Auth::user()->role == 'user') {
-                return redirect()->route('home')->with('success', 'Berhasil Login!');
+                return redirect()->route('home')->with('success', 'Berhasil Login, Selamat Datang!');
             }
         } else {
             return redirect()->back()->with('error', 'Gagal! Pastikan Email dan Password Benar');

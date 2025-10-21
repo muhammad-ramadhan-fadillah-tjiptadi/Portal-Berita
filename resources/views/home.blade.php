@@ -3,7 +3,7 @@
 @section('content')
     <div class="container mt-4">
         @if (Session::get('success'))
-            <div class="alert alert-success">{{ Session::get('success') }} <b>Selamat Datang, {{ Auth::user()->name }}</b></div>
+            <div class="alert alert-success">{{ Session::get('success') }}</div>
         @endif
         @if (Session::get('logout'))
             <div class="alert alert-success">{{ Session::get('logout') }}</div>
@@ -25,7 +25,12 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $post->title }}</h5>
                             <p class="card-text text-muted">
-                                <small>{{ $post->category->name }} • {{ $post->created_at->diffForHumans() }}</small>
+                                <small>
+                                    <i class="fas fa-user me-1"></i>{{ $post->user->name }}
+                                    <i class="fas fa-folder ms-2 me-1"></i>{{ $post->category->name }}
+                                    <br>
+                                    <i class="far fa-clock ms-2 me-1"></i>{{ $post->created_at->diffForHumans() }}
+                                </small>
                             </p>
                             <p class="card-text">{{ Str::limit(strip_tags($post->content), 150) }}</p>
                             <a href="#" class="btn btn-primary">Baca Selengkapnya</a>

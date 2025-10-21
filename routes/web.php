@@ -41,3 +41,12 @@ Route::middleware('isUser')->group(function () {
         })->name('home');
     });
 });
+
+Route::middleware(['auth'])->group(function () {
+    // Route untuk artikel
+    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
+    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
+    // Route untuk draft artikel
+    Route::get('/posts/drafts', [PostController::class, 'drafts'])->name('posts.drafts');
+    Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
+});
