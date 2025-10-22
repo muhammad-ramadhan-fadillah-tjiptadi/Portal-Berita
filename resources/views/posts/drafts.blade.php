@@ -27,12 +27,10 @@
                 @foreach ($drafts as $draft)
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                            @if($draft->image)
+                            @if ($draft->image)
                                 <div class="position-relative overflow-hidden" style="height: 200px;">
-                                    <img src="{{ asset('storage/' . $draft->image) }}"
-                                        class="w-100 h-100"
-                                        style="object-fit: cover;"
-                                        alt="{{ $draft->title }}">
+                                    <img src="{{ asset('storage/' . $draft->image) }}" class="w-100 h-100"
+                                        style="object-fit: cover;" alt="{{ $draft->title }}">
                                     <div class="position-absolute top-0 end-0 m-3">
                                         <span class="badge bg-{{ $draft->status === 'published' ? 'success' : 'warning' }}">
                                             {{ $draft->status === 'published' ? 'Published' : 'Draft' }}
@@ -59,18 +57,17 @@
                                     {{ Str::limit(strip_tags($draft->content), 100) }}
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a href="#" class="btn btn-outline-primary btn-sm">
+                                    <a href="{{ route('user.posts.edit', $draft) }}" class="btn btn-outline-primary btn-sm">
                                         <i class="fas fa-edit me-1"></i> Edit
                                     </a>
                                     <div class="btn-group">
-                                        <form action="{{ route('posts.publish', $draft) }}" method="POST" class="me-1">
+                                        <form action="{{ route('user.posts.publish', $draft) }}" method="POST" class="me-1">
                                             @csrf
-                                            <button type="submit" class="btn btn-sm btn-success"
-                                                    onclick="return confirm('Publikasikan artikel ini?')">
+                                            <button type="submit" class="btn btn-sm btn-success">
                                                 <i class="fas fa-upload me-1"></i> Publish
                                             </button>
                                         </form>
-                                        <form action="#" method="POST" class="ms-1" onsubmit="return confirm('Hapus draft ini?')">
+                                        <form action="{{ route('user.posts.destroy', $draft) }}" method="POST" class="ms-1">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit" class="btn btn-sm btn-outline-danger">
@@ -85,7 +82,7 @@
                 @endforeach
             </div>
 
-            @if($drafts->hasPages())
+            @if ($drafts->hasPages())
                 <div class="d-flex justify-content-center mt-5">
                     <nav aria-label="Page navigation">
                         {{ $drafts->onEachSide(1)->links() }}
@@ -101,14 +98,17 @@
             border-radius: 12px;
             overflow: hidden;
         }
+
         .card:hover {
             transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1) !important;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
         }
+
         .btn-outline-primary {
             border-radius: 20px;
             padding: 0.375rem 1rem;
         }
+
         .badge {
             font-weight: 500;
             padding: 0.4em 0.8em;

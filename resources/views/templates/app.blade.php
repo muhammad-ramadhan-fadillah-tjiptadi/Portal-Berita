@@ -358,7 +358,7 @@
                                 @if (Auth::user()->role === 'user')
                                     <li><a class="dropdown-item" href="{{ route('posts.create') }}"><i
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
-                                    <li><a class="dropdown-item" href="{{ route('posts.drafts') }}"><i
+                                    <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
                                                 class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>
                                 @endif
                                 <li><a class="dropdown-item" href="#"><i

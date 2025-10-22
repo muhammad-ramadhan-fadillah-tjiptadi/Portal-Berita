@@ -148,12 +148,13 @@
                                 </a>
                             </h2>
                             <p class="text-muted mb-4">
-                                {{ Str::limit(strip_tags($post->content), 120) }}
+                                {{ Str::limit(strip_tags($post->content), 150) }}
                             </p>
-                            <a href="#" class="btn btn-outline-primary rounded-pill px-4">
-                                Baca Selengkapnya
-                                <i class="fas fa-arrow-right ms-2"></i>
-                            </a>
+                            <div class="mt-auto">
+                                <a href="{{ route('posts.show', $post) }}" class="btn btn-outline-primary w-100">
+                                    Baca Selengkapnya <i class="fas fa-arrow-right ms-2"></i>
+                                </a>
+                            </div>
                         </div>
                     </article>
                 </div>

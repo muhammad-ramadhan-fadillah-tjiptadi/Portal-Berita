@@ -7,9 +7,17 @@ use App\Models\Categorie;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 
+// Public post routes
+Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+
 // Category routes
 Route::get('/category/{category:slug}', [PostController::class, 'byCategory'])->name('category.posts');
 Route::get('/category/{category:slug}/subcategory/{subcategory}', [PostController::class, 'bySubCategory'])->name('category.subcategory.posts');
+
+// Show post (must be after all other post routes to avoid conflicts)
+Route::get('/posts/{post:slug}', [PostController::class, 'show'])
+    ->name('posts.show')
+    ->where('post', '[\w\-]+');
 
 Route::get('/login', function () {
     return view('auth.login');
@@ -40,14 +48,25 @@ Route::middleware('isUser')->group(function () {
         Route::get('/', function () {
             return view('home');
         })->name('home');
+        
+        // Post CRUD routes
+        Route::prefix('posts')->name('posts.')->group(function () {
+            // Create
+            Route::get('/create', [PostController::class, 'create'])->name('create');
+            Route::post('', [PostController::class, 'store'])->name('store');
+            
+            // Drafts
+            Route::get('/drafts', [PostController::class, 'drafts'])->name('drafts');
+            
+            // Edit/Update
+            Route::get('/{post:slug}/edit', [PostController::class, 'edit'])->name('edit');
+            Route::put('/{post:slug}', [PostController::class, 'update'])->name('update');
+            
+            // Publish
+            Route::post('/{post}/publish', [PostController::class, 'publish'])->name('publish');
+            
+            // Delete
+            Route::delete('/{post:slug}', [PostController::class, 'destroy'])->name('destroy');
+        });
     });
-});
-
-Route::middleware(['auth'])->group(function () {
-    // Route untuk artikel
-    Route::get('/posts/create', [PostController::class, 'create'])->name('posts.create');
-    Route::post('/posts', [PostController::class, 'store'])->name('posts.store');
-    // Route untuk draft artikel
-    Route::get('/posts/drafts', [PostController::class, 'drafts'])->name('posts.drafts');
-    Route::post('/posts/{post}/publish', [PostController::class, 'publish'])->name('posts.publish');
 });

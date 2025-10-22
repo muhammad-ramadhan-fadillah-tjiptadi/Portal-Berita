@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -33,7 +34,7 @@ class PostController extends Controller
     {
         $categories = Categorie::all();
         $category->load('subCategories'); // Eager load subcategories
-        
+
         $posts = $category->posts()
             ->where('status', 'published')
             ->with(['category', 'subCategory']) // Eager load both category and subcategory
@@ -42,7 +43,7 @@ class PostController extends Controller
 
         return view('home', compact('posts', 'categories', 'category'));
     }
-    
+
     /**
      * Display posts by subcategory.
      */
@@ -50,15 +51,15 @@ class PostController extends Controller
     {
         $categories = Categorie::all();
         $subcategory = SubCategorie::where('id', $subcategory)
-                                 ->where('category_id', $category->id)
-                                 ->firstOrFail();
-        
+            ->where('category_id', $category->id)
+            ->firstOrFail();
+
         $posts = Post::where('category_id', $category->id)
-                    ->where('subcategory_id', $subcategory->id)
-                    ->where('status', 'published')
-                    ->with(['category', 'subCategory'])
-                    ->latest('published_at')
-                    ->paginate(6);
+            ->where('subcategory_id', $subcategory->id)
+            ->where('status', 'published')
+            ->with(['category', 'subCategory'])
+            ->latest('published_at')
+            ->paginate(6);
 
         return view('home', compact('posts', 'categories', 'category', 'subcategory'));
     }
@@ -69,13 +70,13 @@ class PostController extends Controller
     public function create(Request $request)
     {
         $categories = Categorie::all();
-        
+
         if ($request->has('category_id')) {
             $category = Categorie::with('subCategories')->findOrFail($request->category_id);
             $subcategories = $category->subCategories;
             return view('posts.create', compact('categories', 'subcategories'));
         }
-        
+
         return view('posts.create', compact('categories'));
     }
 
@@ -118,7 +119,7 @@ class PostController extends Controller
 
         $post->save();
 
-        $redirectRoute = $post->status === 'published' ? 'home' : 'posts.drafts';
+        $redirectRoute = $post->status === 'published' ? 'home' : 'user.posts.drafts';
         return redirect()->route($redirectRoute)
             ->with('success', 'Artikel berhasil disimpan ' . ($post->status === 'published' ? 'dan dipublikasikan' : 'sebagai draft'));
     }
@@ -128,23 +129,54 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        if ($post->status !== 'published' && !auth('web')->check()) {
+            abort(404);
+        }
+
+        $categories = Categorie::all();
+        // Get 3 latest published posts excluding the current one
+        $relatedPosts = Post::where('id', '!=', $post->id)
+            ->where('status', 'published')
+            ->with(['category', 'subCategory'])
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
+        return view('posts.show', compact('post', 'categories', 'relatedPosts'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Post $post)
     {
-        //
+        $categories = Categorie::all();
+        $subcategories = $post->category ? $post->category->subCategories : collect();
+
+        return view('posts.edit', compact('post', 'categories', 'subcategories'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
     public function update(Request $request, Post $post)
     {
-        //
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'content' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'nullable|exists:sub_categories,id',
+            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ]);
+
+        if ($request->hasFile('image')) {
+            // Delete old image if exists
+            if ($post->image) {
+                Storage::delete('public/' . $post->image);
+            }
+            $validated['image'] = $request->file('image')->store('posts', 'public');
+        }
+
+        // Update the post with validated data
+        $post->update($validated);
+
+        // Redirect back to drafts list with success message
+        return redirect()->route('user.posts.drafts')
+            ->with('success', 'Artikel berhasil diperbarui');
     }
 
     /**
@@ -155,11 +187,17 @@ class PostController extends Controller
      */
     public function drafts()
     {
+        // Debug information
+        Log::info('Drafts accessed by user ID: ' . (auth('web')->id() ?? 'Guest'));
+        Log::info('Auth check: ' . (auth('web')->check() ? 'Authenticated' : 'Not authenticated'));
+
         $drafts = Post::where('status', 'draft')
             ->where('user_id', auth('web')->id())
             ->with(['category', 'user'])
             ->latest()
             ->paginate(10);
+
+        Log::info('Found ' . $drafts->count() . ' drafts');
 
         return view('posts.drafts', compact('drafts'));
     }
@@ -182,8 +220,27 @@ class PostController extends Controller
             ->with('success', 'Artikel berhasil dipublikasikan!');
     }
 
+    /**
+     * Remove the specified post from storage.
+     */
     public function destroy(Post $post)
     {
-        //
+        // Check if the authenticated user is the owner of the post
+        if ($post->user_id !== auth('web')->id()) {
+            return back()->with('error', 'Anda tidak memiliki izin untuk menghapus artikel ini.');
+        }
+
+        // Delete the associated image if it exists
+        if ($post->image) {
+            Storage::delete('public/' . $post->image);
+        }
+
+        // Soft delete the post
+        $post->delete();
+
+        // Redirect to the appropriate page based on the post status
+        $redirectRoute = $post->status === 'published' ? 'home' : 'posts.drafts';
+        return redirect()->route($redirectRoute)
+            ->with('success', 'Artikel berhasil dihapus.');
     }
 }
