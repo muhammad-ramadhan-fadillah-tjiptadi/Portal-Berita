@@ -4,7 +4,7 @@
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-5">
             <h1 class="fw-bold">Draft Artikel</h1>
-            <a href="{{ route('posts.create') }}" class="btn btn-primary">
+            <a href="{{ route('user.posts.create') }}" class="btn btn-primary">
                 <i class="fas fa-plus me-2"></i> Buat Artikel Baru
             </a>
         </div>

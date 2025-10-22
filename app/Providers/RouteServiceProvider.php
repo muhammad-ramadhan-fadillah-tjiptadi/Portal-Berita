@@ -37,8 +37,11 @@ class RouteServiceProvider extends ServiceProvider
                 ->group(base_path('routes/api.php'));
         });
 
-        // Explicit route model binding for Post
+        // Explicit route model bindings
         Route::model('post', \App\Models\Post::class);
+        Route::bind('category', function ($value) {
+            return \App\Models\Categorie::findOrFail($value);
+        });
     }
 
     /**

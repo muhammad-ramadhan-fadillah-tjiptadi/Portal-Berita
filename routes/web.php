@@ -37,9 +37,39 @@ Route::get('/logout', [UserController::class, 'logout'])->name('logout');
 
 Route::middleware('isAdmin')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
-        Route::get('/dashboard', function () {
-            return view('admin.dashboard');
-        })->name('dashboard');
+        // Admin Dashboard
+        Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        // Categories Management
+        Route::prefix('categories')->name('categories.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\CategorieController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\CategorieController::class, 'export'])->name('export');
+            Route::get('/create', [\App\Http\Controllers\CategorieController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\CategorieController::class, 'store'])->name('store');
+            Route::get('/{categorie}/edit', [\App\Http\Controllers\CategorieController::class, 'edit'])->name('edit');
+            Route::put('/{categorie}', [\App\Http\Controllers\CategorieController::class, 'update'])->name('update');
+            Route::delete('/{categorie}', [\App\Http\Controllers\CategorieController::class, 'destroy'])->name('destroy');
+
+            // Trash routes
+            Route::get('/trash', [\App\Http\Controllers\CategorieController::class, 'trash'])->name('trash');
+            Route::patch('/{categorie}/restore', [\App\Http\Controllers\CategorieController::class, 'restore'])->name('restore');
+            Route::delete('/{categorie}/force-delete', [\App\Http\Controllers\CategorieController::class, 'deletePermanent'])->name('force-delete');
+        });
+
+        // Subcategories Management (independent from categories)
+        Route::prefix('subcategories')->name('subcategories.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\SubCategorieController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\SubCategorieController::class, 'export'])->name('export');
+            Route::get('/create', [\App\Http\Controllers\SubCategorieController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\SubCategorieController::class, 'store'])->name('store');
+            Route::get('/{subcategory}/edit', [\App\Http\Controllers\SubCategorieController::class, 'edit'])->name('edit');
+            Route::put('/{subcategory}', [\App\Http\Controllers\SubCategorieController::class, 'update'])->name('update');
+            Route::delete('/{subcategory}', [\App\Http\Controllers\SubCategorieController::class, 'destroy'])->name('destroy');
+            
+            // Subcategories Trash routes
+            Route::get('/trash', [\App\Http\Controllers\SubCategorieController::class, 'trash'])->name('trash');
+            Route::patch('/{subcategory}/restore', [\App\Http\Controllers\SubCategorieController::class, 'restore'])->name('restore');
+            Route::delete('/{subcategory}/force-delete', [\App\Http\Controllers\SubCategorieController::class, 'forceDelete'])->name('force-delete');
+        });
     });
 });
 
@@ -48,23 +78,23 @@ Route::middleware('isUser')->group(function () {
         Route::get('/', function () {
             return view('home');
         })->name('home');
-        
+
         // Post CRUD routes
         Route::prefix('posts')->name('posts.')->group(function () {
             // Create
             Route::get('/create', [PostController::class, 'create'])->name('create');
             Route::post('', [PostController::class, 'store'])->name('store');
-            
+
             // Drafts
             Route::get('/drafts', [PostController::class, 'drafts'])->name('drafts');
-            
+
             // Edit/Update
             Route::get('/{post:slug}/edit', [PostController::class, 'edit'])->name('edit');
             Route::put('/{post:slug}', [PostController::class, 'update'])->name('update');
-            
+
             // Publish
             Route::post('/{post}/publish', [PostController::class, 'publish'])->name('publish');
-            
+
             // Delete
             Route::delete('/{post:slug}', [PostController::class, 'destroy'])->name('destroy');
         });

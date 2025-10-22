@@ -50,7 +50,7 @@
             right: 0;
             z-index: 1030;
         }
-        
+
         /* Add padding to body to account for fixed navbar */
         body {
             padding-top: 70px;
@@ -288,12 +288,14 @@
                             </li>
                             <!-- Admin Navigation -->
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}"
+                                   href="{{ route('admin.categories.index') }}">
                                     <i class="fas fa-layer-group me-1"></i> Kelola Kategori
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">
+                                <a class="nav-link {{ request()->is('admin/subcategories*') ? 'active' : '' }}"
+                                   href="{{ route('admin.subcategories.index') }}">
                                     <i class="fas fa-sitemap me-1"></i> Kelola Sub Kategori
                                 </a>
                             </li>
@@ -356,7 +358,7 @@
                                 <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
                                         Saya</a></li>
                                 @if (Auth::user()->role === 'user')
-                                    <li><a class="dropdown-item" href="{{ route('posts.create') }}"><i
+                                    <li><a class="dropdown-item" href="{{ route('user.posts.create') }}"><i
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
                                                 class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>

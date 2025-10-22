@@ -12,6 +12,25 @@ class SubCategorie extends Model
     protected $fillable = [
         'category_id',
         'name',
+        'slug',
         'description',
     ];
+
+    public function category()
+    {
+        return $this->belongsTo(Categorie::class);
+    }
+
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::creating(function ($subcategory) {
+            $subcategory->slug = \Illuminate\Support\Str::slug($subcategory->name);
+        });
+
+        static::updating(function ($subcategory) {
+            $subcategory->slug = \Illuminate\Support\Str::slug($subcategory->name);
+        });
+    }
 }

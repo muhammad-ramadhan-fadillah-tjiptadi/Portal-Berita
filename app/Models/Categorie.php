@@ -23,7 +23,15 @@ class Categorie extends Model
     {
         return $this->hasMany(SubCategorie::class, 'category_id');
     }
-    
+
+    /**
+     * Get all of the posts for the category.
+     */
+    public function posts()
+    {
+        return $this->hasMany(Post::class, 'category_id', 'id');
+    }
+
     protected static function boot()
     {
         parent::boot();
@@ -38,18 +46,12 @@ class Categorie extends Model
     }
 
     /**
-     * Get the posts for the category.
-     */
-    public function posts()
-    {
-        return $this->hasMany(Post::class, 'category_id');
-    }
-
-    /**
      * Get the route key name for Laravel's route model binding.
+     *
+     * @return string
      */
     public function getRouteKeyName()
     {
-        return 'slug';
+        return 'id';
     }
 }
