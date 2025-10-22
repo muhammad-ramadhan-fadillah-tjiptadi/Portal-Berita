@@ -7,8 +7,9 @@ use App\Models\Categorie;
 
 Route::get('/', [PostController::class, 'index'])->name('home');
 
-// Category route
+// Category routes
 Route::get('/category/{category:slug}', [PostController::class, 'byCategory'])->name('category.posts');
+Route::get('/category/{category:slug}/subcategory/{subcategory}', [PostController::class, 'bySubCategory'])->name('category.subcategory.posts');
 
 Route::get('/login', function () {
     return view('auth.login');

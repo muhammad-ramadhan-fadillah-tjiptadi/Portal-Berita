@@ -21,6 +21,98 @@
             <h1 class="mb-5 fw-bold text-center">Berita Terkini</h1>
         @endisset
 
+        @if (isset($category) && $category->subCategories->isNotEmpty())
+            <!-- Modern Subcategory Navigation -->
+            <div class="subcategory-nav mb-5">
+                <div class="subcategory-container">
+                    <ul class="subcategory-list">
+                        <li class="subcategory-item">
+                            <a href="{{ route('category.posts', $category) }}" class="subcategory-link {{ !isset($subcategory) ? 'active' : '' }}">
+                                <span>Semua {{ $category->name }}</span>
+                            </a>
+                        </li>
+                        @foreach ($category->subCategories as $subCat)
+                            <li class="subcategory-item">
+                                <a href="{{ route('category.subcategory.posts', ['category' => $category, 'subcategory' => $subCat->id]) }}" 
+                                   class="subcategory-link {{ isset($subcategory) && $subcategory->id == $subCat->id ? 'active' : '' }}">
+                                    {{ $subCat->name }}
+                                </a>
+                            </li>
+                        @endforeach
+                    </ul>
+                </div>
+            </div>
+        @endif
+
+        <style>
+            /* Subcategory Navigation Styles */
+            .subcategory-nav {
+                position: relative;
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
+                padding: 0.5rem 0;
+                margin: 0 -15px;
+            }
+
+            .subcategory-container {
+                max-width: 100%;
+                padding: 0 15px;
+            }
+
+            .subcategory-list {
+                display: flex;
+                list-style: none;
+                margin: 0;
+                padding: 0;
+                gap: 0.75rem;
+            }
+
+            .subcategory-item {
+                flex: 0 0 auto;
+            }
+
+            .subcategory-link {
+                display: inline-flex;
+                align-items: center;
+                padding: 0.5rem 1.25rem;
+                border-radius: 50px;
+                background: #f8f9fa;
+                color: #495057;
+                text-decoration: none;
+                font-weight: 500;
+                font-size: 0.9rem;
+                transition: all 0.3s ease;
+                border: 1px solid #e9ecef;
+                white-space: nowrap;
+            }
+
+            .subcategory-link:hover {
+                background: #e9ecef;
+                color: #0da2e7;
+                transform: translateY(-2px);
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            }
+
+            .subcategory-link.active {
+                background: #0da2e7;
+                color: white;
+                border-color: #0da2e7;
+                box-shadow: 0 4px 12px rgba(13, 162, 231, 0.2);
+            }
+
+
+            @media (max-width: 768px) {
+                .subcategory-nav {
+                    padding: 0.5rem 0;
+                }
+
+                .subcategory-link {
+                    padding: 0.4rem 1rem;
+                    font-size: 0.85rem;
+                }
+            }
+        </style>
+
         <div class="row g-4">
             @forelse($posts as $post)
                 <div class="col-12 col-md-6 col-lg-4">

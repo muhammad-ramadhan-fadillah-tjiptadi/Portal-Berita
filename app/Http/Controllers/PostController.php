@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Categorie;
+use App\Models\SubCategorie;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -31,21 +32,50 @@ class PostController extends Controller
     public function byCategory(Categorie $category)
     {
         $categories = Categorie::all();
+        $category->load('subCategories'); // Eager load subcategories
+        
         $posts = $category->posts()
             ->where('status', 'published')
-            ->with('category')
+            ->with(['category', 'subCategory']) // Eager load both category and subcategory
             ->latest('published_at')
             ->paginate(6);
-            
+
         return view('home', compact('posts', 'categories', 'category'));
+    }
+    
+    /**
+     * Display posts by subcategory.
+     */
+    public function bySubCategory(Categorie $category, $subcategory)
+    {
+        $categories = Categorie::all();
+        $subcategory = SubCategorie::where('id', $subcategory)
+                                 ->where('category_id', $category->id)
+                                 ->firstOrFail();
+        
+        $posts = Post::where('category_id', $category->id)
+                    ->where('subcategory_id', $subcategory->id)
+                    ->where('status', 'published')
+                    ->with(['category', 'subCategory'])
+                    ->latest('published_at')
+                    ->paginate(6);
+
+        return view('home', compact('posts', 'categories', 'category', 'subcategory'));
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         $categories = Categorie::all();
+        
+        if ($request->has('category_id')) {
+            $category = Categorie::with('subCategories')->findOrFail($request->category_id);
+            $subcategories = $category->subCategories;
+            return view('posts.create', compact('categories', 'subcategories'));
+        }
+        
         return view('posts.create', compact('categories'));
     }
 
@@ -58,8 +88,8 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
+            'subcategory_id' => 'nullable|exists:sub_categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
-            'publish' => 'sometimes|boolean'
         ]);
 
         $post = new Post();
@@ -67,13 +97,17 @@ class PostController extends Controller
         $post->slug = Str::slug($validated['title']);
         $post->content = $validated['content'];
         $post->category_id = $validated['category_id'];
+        $post->subcategory_id = $validated['subcategory_id'] ?? null;
         $post->user_id = auth('web')->id();
 
-        // Handle publish status - check if 'publish' is set in the request and equals '1'
+        // Handle publish status
         $post->status = $request->has('publish') && $request->input('publish') == '1' ? 'published' : 'draft';
 
-        if ($request->hasFile('image')) {
-            $path = $request->file('image')->store('posts', 'public');
+        // Handle image upload
+        if ($request->hasFile('image') && $request->file('image')->isValid()) {
+            $image = $request->file('image');
+            $imageName = time() . '_' . $image->getClientOriginalName();
+            $path = $image->storeAs('posts', $imageName, 'public');
             $post->image = $path;
         }
 

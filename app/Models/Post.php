@@ -36,4 +36,12 @@ class Post extends Model
     {
         return $this->belongsTo(User::class);
     }
+
+    /**
+     * Get the subcategory that owns the post.
+     */
+    public function subCategory()
+    {
+        return $this->belongsTo(SubCategorie::class, 'subcategory_id');
+    }
 }

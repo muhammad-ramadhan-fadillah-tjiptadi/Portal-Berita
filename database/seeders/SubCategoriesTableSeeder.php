@@ -14,33 +14,65 @@ class SubCategoriesTableSeeder extends Seeder
      */
     public function run(): void
     {
-        // Get the Olahraga category
-        $sportsCategory = Categorie::where('name', 'Olahraga')->first();
-
-        if ($sportsCategory) {
-            $subCategories = [
+        // Get all categories
+        $categories = [
+            'Kesehatan' => [
+                [
+                    'name' => 'Penyakit Menular',
+                    'description' => 'Berita dan informasi seputar penyakit menular',
+                ],
+                [
+                    'name' => 'Gaya Hidup Sehat',
+                    'description' => 'Tips dan informasi gaya hidup sehat',
+                ],
+                [
+                    'name' => 'Pengobatan Alternatif',
+                    'description' => 'Informasi tentang pengobatan alternatif dan tradisional',
+                ],
+            ],
+            'Teknologi' => [
+                [
+                    'name' => 'Gadget',
+                    'description' => 'Berita dan review gadget terbaru',
+                ],
+                [
+                    'name' => 'Aplikasi',
+                    'description' => 'Informasi aplikasi terbaru dan rekomendasi',
+                ],
+                [
+                    'name' => 'Internet',
+                    'description' => 'Berita dan perkembangan dunia internet',
+                ],
+            ],
+            'Olahraga' => [
                 [
                     'name' => 'Sepak Bola',
                     'description' => 'Berita dan informasi seputar sepak bola',
-                    'category_id' => $sportsCategory->id,
                 ],
                 [
                     'name' => 'Bola Basket',
                     'description' => 'Berita dan informasi seputar bola basket',
-                    'category_id' => $sportsCategory->id,
                 ],
                 [
                     'name' => 'Futsal',
                     'description' => 'Berita dan informasi seputar futsal',
-                    'category_id' => $sportsCategory->id,
                 ],
-            ];
+            ]
+        ];
 
-            foreach ($subCategories as $subCategory) {
-                SubCategorie::updateOrCreate(
-                    ['name' => $subCategory['name'], 'category_id' => $subCategory['category_id']],
-                    $subCategory
-                );
+        foreach ($categories as $categoryName => $subCategories) {
+            $category = Categorie::where('name', $categoryName)->first();
+            
+            if ($category) {
+                foreach ($subCategories as $subCategory) {
+                    SubCategorie::updateOrCreate(
+                        [
+                            'name' => $subCategory['name'],
+                            'category_id' => $category->id
+                        ],
+                        array_merge($subCategory, ['category_id' => $category->id])
+                    );
+                }
             }
         }
     }

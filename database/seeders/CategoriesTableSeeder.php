@@ -15,12 +15,12 @@ class CategoriesTableSeeder extends Seeder
     {
         $categories = [
             [
-                'name' => 'Nasional',
-                'description' => 'Berita dalam negeri dan isu-isu nasional',
+                'name' => 'Kesehatan',
+                'description' => 'Berita dan informasi seputar kesehatan',
             ],
             [
-                'name' => 'Internasional',
-                'description' => 'Berita mancanegara dan isu global',
+                'name' => 'Teknologi',
+                'description' => 'Berita dan informasi seputar teknologi',
             ],
             [
                 'name' => 'Olahraga',

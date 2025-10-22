@@ -44,6 +44,16 @@
             background: var(--primary-color);
             box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
             padding: 0.75rem 0;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+        }
+        
+        /* Add padding to body to account for fixed navbar */
+        body {
+            padding-top: 70px;
         }
 
         .navbar-brand {

@@ -16,6 +16,14 @@ class Categorie extends Model
         'description',
     ];
 
+    /**
+     * Get all of the subcategories for the category.
+     */
+    public function subCategories()
+    {
+        return $this->hasMany(SubCategorie::class, 'category_id');
+    }
+    
     protected static function boot()
     {
         parent::boot();
