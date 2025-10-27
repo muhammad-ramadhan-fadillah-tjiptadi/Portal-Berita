@@ -289,13 +289,13 @@
                             <!-- Admin Navigation -->
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}"
-                                   href="{{ route('admin.categories.index') }}">
+                                    href="{{ route('admin.categories.index') }}">
                                     <i class="fas fa-layer-group me-1"></i> Kelola Kategori
                                 </a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->is('admin/subcategories*') ? 'active' : '' }}"
-                                   href="{{ route('admin.subcategories.index') }}">
+                                    href="{{ route('admin.subcategories.index') }}">
                                     <i class="fas fa-sitemap me-1"></i> Kelola Sub Kategori
                                 </a>
                             </li>
@@ -362,6 +362,10 @@
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
                                                 class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="fas fa-file me-2"></i>Post Saya</a></li>
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="fas fa-comment me-2"></i>Comment Saya</a></li>
                                 @endif
                                 <li><a class="dropdown-item" href="#"><i
                                             class="fas fa-cog me-2"></i>Pengaturan</a></li>
