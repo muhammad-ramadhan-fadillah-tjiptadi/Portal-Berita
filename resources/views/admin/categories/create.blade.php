@@ -1,35 +1,5 @@
 @extends('templates.app')
 
-@push('scripts')
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const nameInput = document.getElementById('name');
-        const slugInput = document.getElementById('slug');
-
-        // Function to create slug from text
-        function createSlug(text) {
-            return text.toString().toLowerCase()
-                .replace(/[^\w\-]+/g, '-')  // Replace non-word chars with -
-                .replace(/\-\-+/g, '-')      // Replace multiple - with single -
-                .replace(/^-+/, '')           // Trim - from start of text
-                .replace(/-+$/, '');          // Trim - from end of text
-        }
-
-        // Auto-generate slug when name changes
-        nameInput.addEventListener('input', function() {
-            if (!slugInput.value || slugInput.value === '') {
-                slugInput.value = createSlug(this.value);
-            }
-        });
-
-        // Allow manual editing of slug, but keep it URL-friendly
-        slugInput.addEventListener('input', function() {
-            this.value = createSlug(this.value);
-        });
-    });
-</script>
-@endpush
-
 @section('content')
     <div class="container py-4">
         <div class="card shadow-sm">
@@ -59,25 +29,6 @@
                             </div>
                         @enderror
                         <small class="text-muted">Contoh: Teknologi, Kesehatan, Pendidikan, dll.</small>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="slug" class="form-label">
-                            Slug <span class="text-danger">*</span>
-                        </label>
-                        <input type="text"
-                            class="form-control @error('slug') is-invalid @enderror"
-                            id="slug"
-                            name="slug"
-                            value="{{ old('slug') }}"
-                            required
-                            placeholder="Slug akan otomatis terisi">
-                        @error('slug')
-                            <div class="invalid-feedback">
-                                {{ $message }}
-                            </div>
-                        @enderror
-                        {{-- <small class="text-muted">URL-friendly version of the name</small> --}}
                     </div>
 
                     <div class="mb-4">

@@ -49,16 +49,17 @@ class CategorieController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
-            'slug' => 'required|string|max:255|unique:categories,slug',
             'description' => 'nullable|string',
         ]);
 
+        // Auto-generate slug dari nama kategori
+        $validated['slug'] = Str::slug($validated['name']);
         $validated['description'] = $request->description ?? ''; // Ensure description is not null
 
         Categorie::create($validated);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Kategori berhasil ditambahkan');
+            ->with('success', 'Kategori berhasil ditambahkan !');
     }
 
     /**
@@ -93,7 +94,7 @@ class CategorieController extends Controller
         $categorie->update($validated);
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Kategori berhasil diperbarui');
+            ->with('success', 'Kategori berhasil diperbarui !');
     }
 
     /**
@@ -109,7 +110,7 @@ class CategorieController extends Controller
         $categorie->delete();
 
         return redirect()->route('admin.categories.index')
-            ->with('success', 'Kategori berhasil dipindahkan ke tempat sampah');
+            ->with('success', 'Kategori berhasil dipindahkan ke tempat sampah !');
     }
 
     /**
@@ -129,7 +130,7 @@ class CategorieController extends Controller
         $category = Categorie::onlyTrashed()->findOrFail($id);
         $category->restore();
         return redirect()->route('admin.categories.trash')
-            ->with('success', 'Kategori berhasil dikembalikan');
+            ->with('success', 'Kategori berhasil dikembalikan !');
     }
 
     /**
@@ -140,6 +141,6 @@ class CategorieController extends Controller
         $category = Categorie::onlyTrashed()->findOrFail($id);
         $category->forceDelete();
         return redirect()->route('admin.categories.trash')
-            ->with('success', 'Kategori berhasil dihapus permanen');
+            ->with('success', 'Kategori berhasil dihapus permanen !');
     }
 }

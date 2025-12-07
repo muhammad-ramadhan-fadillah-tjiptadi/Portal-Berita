@@ -279,9 +279,11 @@
         <!-- Container wrapper -->
         <div class="container-fluid">
             <!-- Navbar brand -->
-            <a class="navbar-brand" href="{{ route('home') }}">
-                <i class="fas fa-newspaper"></i> menit.com
-            </a>
+            @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
+                <a class="navbar-brand" href="{{ route('home') }}">
+                    <i class="fas fa-newspaper"></i> menit.com
+                </a>
+            @endif
 
             <!-- Toggle button -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
@@ -351,31 +353,34 @@
 
                 <!-- Right elements -->
                 <div class="navbar-right-elements">
-                    <!-- Search Form -->
-                    <form class="search-form" method="GET" action="{{ route('posts.search') }}">
-                        @csrf
-                        <div class="search-container">
-                            <input type="text" name="search_post" class="search-input" placeholder="Cari berita..."
-                                aria-label="Search" aria-describedby="search-addon"
-                                value="{{ request('search_post') }}" />
-                            <button type="submit" class="search-btn">
-                                <i class="fas fa-search search-icon"></i>
-                            </button>
-                        </div>
-                    </form>
+                    <!-- Search Form - Hide for admin -->
+                    @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
+                        <form class="search-form" method="GET" action="{{ route('posts.search') }}">
+                            @csrf
+                            <div class="search-container">
+                                <input type="text" name="search_post" class="search-input" placeholder="Cari berita..."
+                                    aria-label="Search" aria-describedby="search-addon"
+                                    value="{{ request('search_post') }}" />
+                                <button type="submit" class="search-btn">
+                                    <i class="fas fa-search search-icon"></i>
+                                </button>
+                            </div>
+                        </form>
+                    @endif
 
-                    <!-- Avatar Dropdown -->
-                    <div class="dropdown">
-                        <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                            role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
-                                height="40" width="40" alt="User Profile" loading="lazy">
-                        </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            @if (Auth::check())
-                                <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
-                                        Saya</a></li>
-                                @if (Auth::user()->role === 'user')
+                    <!-- Avatar Dropdown - Hide for admin -->
+                    @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
+                        <div class="dropdown">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
+                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
+                                    height="40" width="40" alt="User Profile" loading="lazy">
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                @if (Auth::check())
+                                    <!-- User Menu -->
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
+                                            Saya</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.create') }}"><i
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
@@ -384,25 +389,30 @@
                                             Saya</a></li>
                                     <li><a class="dropdown-item" href="#"><i
                                                 class="fas fa-comment me-2"></i>Comment Saya</a></li>
+                                    <li><a class="dropdown-item" href="#"><i
+                                                class="fas fa-cog me-2"></i>Pengaturan</a></li>
+                                    <li>
+                                        <hr class="dropdown-divider">
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item" href="{{ route('logout') }}">
+                                            <i class="fas fa-sign-out-alt me-2"></i>Logout
+                                        </a>
+                                    </li>
+                                @else
+                                    <li><a class="dropdown-item" href="{{ route('login') }}"><i
+                                                class="fas fa-sign-in-alt me-2"></i>Login</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('signup') }}"><i
+                                                class="fas fa-user-plus me-2"></i>Daftar</a></li>
                                 @endif
-                                <li><a class="dropdown-item" href="#"><i
-                                            class="fas fa-cog me-2"></i>Pengaturan</a></li>
-                                <li>
-                                    <hr class="dropdown-divider">
-                                </li>
-                                <li>
-                                    <a class="dropdown-item" href="{{ route('logout') }}">
-                                        <i class="fas fa-sign-out-alt me-2"></i>Logout
-                                    </a>
-                                </li>
-                            @else
-                                <li><a class="dropdown-item" href="{{ route('login') }}"><i
-                                            class="fas fa-sign-in-alt me-2"></i>Login</a></li>
-                                <li><a class="dropdown-item" href="{{ route('signup') }}"><i
-                                            class="fas fa-user-plus me-2"></i>Daftar</a></li>
-                            @endif
-                        </ul>
-                    </div>
+                            </ul>
+                        </div>
+                    @else
+                        <!-- Admin Logout Button -->
+                        <a href="{{ route('logout') }}" class="nav-link">
+                            <i class="fas fa-sign-out-alt me-1"></i> Logout
+                        </a>
+                    @endif
                 </div>
                 <!-- Right elements -->
             </div>

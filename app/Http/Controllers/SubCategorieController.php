@@ -34,11 +34,11 @@ class SubCategorieController extends Controller
         SubCategorie::create([
             'name' => $validated['name'],
             'description' => $validated['description'] ?? null,
-            'categorie_id' => $validated['categorie_id'],
+            'category_id' => $validated['categorie_id'],
         ]);
 
         return redirect()->route('admin.subcategories.index')
-            ->with('success', 'Sub Kategori berhasil ditambahkan');
+            ->with('success', 'Sub Kategori berhasil ditambahkan !');
     }
 
     public function edit(SubCategorie $subcategory)
@@ -58,14 +58,14 @@ class SubCategorieController extends Controller
         $subcategory->update($validated);
 
         return redirect()->route('admin.subcategories.index')
-            ->with('success', 'Sub Kategori berhasil diperbarui');
+            ->with('success', 'Sub Kategori berhasil diperbarui !');
     }
 
     public function destroy(SubCategorie $subcategory)
     {
         $subcategory->delete();
         return redirect()->route('admin.subcategories.index')
-            ->with('success', 'Sub Kategori berhasil dihapus');
+            ->with('success', 'Sub Kategori berhasil dihapus !');
     }
 
     public function trash()
@@ -80,7 +80,7 @@ class SubCategorieController extends Controller
         $subcategory->restore();
 
         return redirect()->route('admin.subcategories.trash')
-            ->with('success', 'Sub Kategori berhasil dipulihkan');
+            ->with('success', 'Sub Kategori berhasil dipulihkan !');
     }
 
     public function forceDelete($id)
@@ -89,7 +89,7 @@ class SubCategorieController extends Controller
         $subcategory->forceDelete();
 
         return redirect()->route('admin.subcategories.trash')
-            ->with('success', 'Sub Kategori berhasil dihapus permanen');
+            ->with('success', 'Sub Kategori berhasil dihapus permanen !');
     }
 
     /**
