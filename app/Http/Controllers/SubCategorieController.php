@@ -29,6 +29,13 @@ class SubCategorieController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'categorie_id' => 'required|exists:categories,id',
+        ], [
+            'name.required' => 'Nama sub kategori wajib diisi',
+            'name.string' => 'Nama sub kategori harus berupa teks',
+            'name.max' => 'Nama sub kategori maksimal 255 karakter',
+            'description.string' => 'Deskripsi harus berupa teks',
+            'categorie_id.required' => 'Kategori induk wajib dipilih',
+            'categorie_id.exists' => 'Kategori induk yang dipilih tidak valid',
         ]);
 
         SubCategorie::create([
@@ -53,6 +60,13 @@ class SubCategorieController extends Controller
             'name' => 'required|string|max:255',
             'description' => 'nullable|string',
             'categorie_id' => 'required|exists:categories,id',
+        ], [
+            'name.required' => 'Nama sub kategori wajib diisi',
+            'name.string' => 'Nama sub kategori harus berupa teks',
+            'name.max' => 'Nama sub kategori maksimal 255 karakter',
+            'description.string' => 'Deskripsi harus berupa teks',
+            'categorie_id.required' => 'Kategori induk wajib dipilih',
+            'categorie_id.exists' => 'Kategori induk yang dipilih tidak valid',
         ]);
 
         $subcategory->update($validated);

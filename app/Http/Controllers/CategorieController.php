@@ -50,6 +50,12 @@ class CategorieController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name',
             'description' => 'nullable|string',
+        ], [
+            'name.required' => 'Nama kategori wajib diisi',
+            'name.string' => 'Nama kategori harus berupa teks',
+            'name.max' => 'Nama kategori maksimal 255 karakter',
+            'name.unique' => 'Nama kategori sudah terdaftar sebelumnya',
+            'description.string' => 'Deskripsi harus berupa teks',
         ]);
 
         // Auto-generate slug dari nama kategori
@@ -87,6 +93,12 @@ class CategorieController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255|unique:categories,name,' . $categorie->id,
             'description' => 'nullable|string',
+        ], [
+            'name.required' => 'Nama kategori wajib diisi',
+            'name.string' => 'Nama kategori harus berupa teks',
+            'name.max' => 'Nama kategori maksimal 255 karakter',
+            'name.unique' => 'Nama kategori sudah terdaftar sebelumnya',
+            'description.string' => 'Deskripsi harus berupa teks',
         ]);
 
         $validated['slug'] = Str::slug($validated['name']);
