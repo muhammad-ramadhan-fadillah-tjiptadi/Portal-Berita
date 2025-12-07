@@ -100,6 +100,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Kategori</th>
+                <th>Deskripsi</th>
                 <th>Slug</th>
                 <th>Jumlah Artikel</th>
                 <th>Aksi</th>
@@ -108,6 +109,7 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $category->name }}</td>
+                    <td>{{ $category->description ?? '-' }}</td>
                     <td>{{ $category->slug }}</td>
                     <td>{{ $category->posts_count }}</td>
                     <td class="d-flex">
@@ -126,7 +128,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">Tidak ada data kategori</td>
+                    <td colspan="6" class="text-center">Tidak ada data kategori</td>
                 </tr>
             @endforelse
         </table>

@@ -77,6 +77,7 @@
                 <th>No</th>
                 <th>Nama Sub Kategori</th>
                 <th>Kategori Induk</th>
+                <th>Deskripsi</th>
                 <th>Dihapus Pada</th>
                 <th>Aksi</th>
             </tr>
@@ -85,6 +86,7 @@
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $subcategory->name }}</td>
                     <td>{{ $subcategory->category->name ?? '-' }}</td>
+                    <td>{{ $subcategory->description ?? '-' }}</td>
                     <td>{{ $subcategory->deleted_at->format('d M Y H:i') }}</td>
                     <td class="d-flex">
                         <form action="{{ route('admin.subcategories.restore', $subcategory->id) }}" method="POST"
@@ -106,7 +108,7 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" class="text-center">Tidak ada data di tempat sampah</td>
+                    <td colspan="6" class="text-center">Tidak ada data di tempat sampah</td>
                 </tr>
             @endforelse
         </table>

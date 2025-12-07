@@ -85,6 +85,7 @@
                 <tr>
                     <th>No</th>
                     <th>Nama Kategori</th>
+                    <th>Deskripsi</th>
                     <th>Dihapus Pada</th>
                     <th>Aksi</th>
                 </tr>
@@ -94,6 +95,7 @@
                     <tr>
                         <td>{{ $index + 1 }}</td>
                         <td>{{ $category->name }}</td>
+                        <td>{{ $category->description ?? '-' }}</td>
                         <td>{{ $category->deleted_at->format('d-m-Y H:i') }}</td>
                         <td class="d-flex">
                             <form action="{{ route('admin.categories.restore', $category->id) }}" method="POST"
@@ -115,7 +117,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="4" class="text-center">Tidak ada data di tempat sampah</td>
+                        <td colspan="5" class="text-center">Tidak ada data di tempat sampah</td>
                     </tr>
                 @endforelse
             </tbody>
