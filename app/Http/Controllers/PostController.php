@@ -243,4 +243,36 @@ class PostController extends Controller
         return redirect()->route($redirectRoute)
             ->with('success', 'Artikel berhasil dihapus.');
     }
+
+    /**
+     * Search posts by title or content
+     */
+    public function search(Request $request)
+    {
+        // Ambil input dari form search
+        $searchQuery = $request->search_post;
+        $categories = Categorie::all();
+
+        // Cek jika input search tidak kosong
+        if ($searchQuery != "") {
+            // LIKE : mencari kata yang mengandung teks tertentu
+            // % didepan : mencari kata belakang, % di belakang : mencari data di depan, % depan belakang : mencari di depan tengah belakang
+            $posts = Post::where('status', 'published')
+                ->where(function ($query) use ($searchQuery) {
+                    $query->where('title', 'LIKE', '%' . $searchQuery . '%')
+                        ->orWhere('content', 'LIKE', '%' . $searchQuery . '%');
+                })
+                ->with(['category', 'user', 'subCategory'])
+                ->latest('published_at')
+                ->paginate(6);
+        } else {
+            // Jika search kosong, tampilkan semua posts yang published
+            $posts = Post::where('status', 'published')
+                ->with(['category', 'user', 'subCategory'])
+                ->latest('published_at')
+                ->paginate(6);
+        }
+
+        return view('home', compact('posts', 'categories'));
+    }
 }

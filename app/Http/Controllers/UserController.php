@@ -72,10 +72,13 @@ class UserController extends Controller
         ]);
         $data = $request->only(['password', 'email']);
         if (Auth::attempt($data)) {
-            if (Auth::user()->role == 'admin') {
-                return redirect()->route('admin.dashboard')->with('success', 'Berhasil Login!');
-            } elseif (Auth::user()->role == 'user') {
-                return redirect()->route('home')->with('success', 'Berhasil Login, Selamat Datang!');
+            $user = Auth::user();
+
+            if ($user->role == 'admin') {
+                return redirect()->route('admin.dashboard')->with('success', 'Berhasil Login, Selamat Datang <strong> Admin !</strong>');
+            } elseif ($user->role == 'user') {
+                $welcomeMessage = 'Berhasil Login, Selamat Datang <strong>' . $user->name . '</strong> !';
+                return redirect()->route('home')->with('success', $welcomeMessage);
             }
         } else {
             return redirect()->back()->with('error', 'Gagal! Pastikan Email dan Password Benar');

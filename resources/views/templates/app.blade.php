@@ -21,6 +21,11 @@
     <meta http-equiv="Pragma" content="no-cache" />
     <meta http-equiv="Expires" content="0" />
     <style>
+        /* Alert styling */
+        .alert {
+            font-weight: normal !important;
+        }
+
         :root {
             /* Updated color scheme from dark to light with blue accent */
             --primary-color: #ffffff;
@@ -95,11 +100,15 @@
             margin: 0 1rem;
         }
 
+        .search-form {
+            margin: 0;
+        }
+
         .search-input {
             background-color: var(--secondary-color);
             border: 1px solid var(--border-color);
             color: var(--text-light);
-            padding: 0.5rem 1rem;
+            padding: 0.5rem 2.5rem 0.5rem 1rem;
             border-radius: 25px;
             width: 250px;
             font-size: 0.9rem;
@@ -114,20 +123,27 @@
             border-color: var(--accent-color);
         }
 
-        .search-icon {
+        .search-btn {
+            background: none;
+            border: none;
+            padding: 0;
+            cursor: pointer;
             position: absolute;
             right: 15px;
             top: 50%;
             transform: translateY(-50%);
+        }
+
+        .search-icon {
             color: var(--text-muted);
+            transition: color 0.3s ease;
         }
 
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-color);
+        .search-input:focus ~ .search-btn .search-icon {
+            color: var(--accent-color);
         }
 
-        .search-input:focus~.search-icon {
+        .search-btn:hover .search-icon {
             color: var(--accent-color);
         }
 
@@ -335,16 +351,18 @@
 
                 <!-- Right elements -->
                 <div class="navbar-right-elements">
-                    <!-- Search Bar - Only show for non-admin users -->
-                    <!-- @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
--->
-                    <div class="search-container">
-                        <input type="search" class="search-input" placeholder="Cari berita..." aria-label="Search"
-                            aria-describedby="search-addon" />
-                        <i class="fas fa-search search-icon"></i>
-                    </div>
-                    <!--
-@endif -->
+                    <!-- Search Form -->
+                    <form class="search-form" method="GET" action="{{ route('posts.search') }}">
+                        @csrf
+                        <div class="search-container">
+                            <input type="text" name="search_post" class="search-input" placeholder="Cari berita..."
+                                aria-label="Search" aria-describedby="search-addon"
+                                value="{{ request('search_post') }}" />
+                            <button type="submit" class="search-btn">
+                                <i class="fas fa-search search-icon"></i>
+                            </button>
+                        </div>
+                    </form>
 
                     <!-- Avatar Dropdown -->
                     <div class="dropdown">
@@ -362,8 +380,8 @@
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
                                                 class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>
-                                    <li><a class="dropdown-item" href="#"><i
-                                                class="fas fa-file me-2"></i>Post Saya</a></li>
+                                    <li><a class="dropdown-item" href="#"><i class="fas fa-file me-2"></i>Post
+                                            Saya</a></li>
                                     <li><a class="dropdown-item" href="#"><i
                                                 class="fas fa-comment me-2"></i>Comment Saya</a></li>
                                 @endif
@@ -392,30 +410,6 @@
         </div>
         <!-- Container wrapper -->
     </nav>
-    <!-- Navbar -->
-
-    {{-- <div class="container mt-4">
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @if (session('logout'))
-            <div class="alert alert-info alert-dismissible fade show" role="alert">
-                {{ session('logout') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-        @yield('content')
-    </div> --}}
-
     @yield('content')
 
     <!-- Bootstrap JS -->

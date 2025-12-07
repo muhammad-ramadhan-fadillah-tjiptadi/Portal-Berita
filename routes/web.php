@@ -9,6 +9,7 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 
 // Public post routes
 Route::get('/posts', [PostController::class, 'index'])->name('posts.index');
+Route::get('/search', [PostController::class, 'search'])->name('posts.search');
 
 // Category routes
 Route::get('/category/{category:slug}', [PostController::class, 'byCategory'])->name('category.posts');
@@ -64,7 +65,7 @@ Route::middleware('isAdmin')->group(function () {
             Route::get('/{subcategory}/edit', [\App\Http\Controllers\SubCategorieController::class, 'edit'])->name('edit');
             Route::put('/{subcategory}', [\App\Http\Controllers\SubCategorieController::class, 'update'])->name('update');
             Route::delete('/{subcategory}', [\App\Http\Controllers\SubCategorieController::class, 'destroy'])->name('destroy');
-            
+
             // Subcategories Trash routes
             Route::get('/trash', [\App\Http\Controllers\SubCategorieController::class, 'trash'])->name('trash');
             Route::patch('/{subcategory}/restore', [\App\Http\Controllers\SubCategorieController::class, 'restore'])->name('restore');
@@ -84,17 +85,13 @@ Route::middleware('isUser')->group(function () {
             // Create
             Route::get('/create', [PostController::class, 'create'])->name('create');
             Route::post('', [PostController::class, 'store'])->name('store');
-
             // Drafts
             Route::get('/drafts', [PostController::class, 'drafts'])->name('drafts');
-
             // Edit/Update
             Route::get('/{post:slug}/edit', [PostController::class, 'edit'])->name('edit');
             Route::put('/{post:slug}', [PostController::class, 'update'])->name('update');
-
             // Publish
             Route::post('/{post}/publish', [PostController::class, 'publish'])->name('publish');
-
             // Delete
             Route::delete('/{post:slug}', [PostController::class, 'destroy'])->name('destroy');
         });

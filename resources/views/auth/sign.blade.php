@@ -395,7 +395,7 @@
                             <label for="first_name" class="form-label">Nama Depan</label>
                             <input type="text" id="first_name" name="first_name"
                                 class="form-control @error('first_name') is-invalid @enderror"
-                                value="{{ old('first_name') }}" placeholder="John" required autofocus
+                                value="{{ old('first_name') }}" placeholder="Nama Depan" required autofocus
                                 oninvalid="this.setCustomValidity('Harap isi nama depan')"
                                 oninput="this.setCustomValidity('')" />
                             @error('first_name')
@@ -411,7 +411,7 @@
                             <label for="last_name" class="form-label">Nama Belakang</label>
                             <input type="text" id="last_name" name="last_name"
                                 class="form-control @error('last_name') is-invalid @enderror"
-                                value="{{ old('last_name') }}" placeholder="Doe" required
+                                value="{{ old('last_name') }}" placeholder="Nama Belakang" required
                                 oninvalid="this.setCustomValidity('Harap isi nama belakang')"
                                 oninput="this.setCustomValidity('')" />
                             @error('last_name')

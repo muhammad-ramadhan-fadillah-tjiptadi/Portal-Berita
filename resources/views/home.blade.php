@@ -4,7 +4,7 @@
     <div class="container py-5">
         @if (Session::get('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ Session::get('success') }}
+                {!! Session::get('success') !!}
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         @endif
@@ -27,14 +27,15 @@
                 <div class="subcategory-container">
                     <ul class="subcategory-list">
                         <li class="subcategory-item">
-                            <a href="{{ route('category.posts', $category) }}" class="subcategory-link {{ !isset($subcategory) ? 'active' : '' }}">
+                            <a href="{{ route('category.posts', $category) }}"
+                                class="subcategory-link {{ !isset($subcategory) ? 'active' : '' }}">
                                 <span>Semua {{ $category->name }}</span>
                             </a>
                         </li>
                         @foreach ($category->subCategories as $subCat)
                             <li class="subcategory-item">
-                                <a href="{{ route('category.subcategory.posts', ['category' => $category, 'subcategory' => $subCat->id]) }}" 
-                                   class="subcategory-link {{ isset($subcategory) && $subcategory->id == $subCat->id ? 'active' : '' }}">
+                                <a href="{{ route('category.subcategory.posts', ['category' => $category, 'subcategory' => $subCat->id]) }}"
+                                    class="subcategory-link {{ isset($subcategory) && $subcategory->id == $subCat->id ? 'active' : '' }}">
                                     {{ $subCat->name }}
                                 </a>
                             </li>
