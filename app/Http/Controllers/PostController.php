@@ -89,8 +89,22 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
             'category_id' => 'required|exists:categories,id',
-            'subcategory_id' => 'nullable|exists:sub_categories,id',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'subcategory_id' => 'required|exists:sub_categories,id',
+            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'title.required' => 'Judul artikel harus diisi.',
+            'title.string' => 'Judul artikel harus berupa teks.',
+            'title.max' => 'Judul artikel tidak boleh lebih dari 255 karakter.',
+            'content.required' => 'Isi artikel harus diisi.',
+            'content.string' => 'Isi artikel harus berupa teks.',
+            'category_id.required' => 'Kategori harus dipilih.',
+            'category_id.exists' => 'Kategori yang dipilih tidak valid.',
+            'subcategory_id.required' => 'Sub kategori harus dipilih.',
+            'subcategory_id.exists' => 'Sub kategori yang dipilih tidak valid.',
+            'image.required' => 'Gambar utama harus diunggah.',
+            'image.image' => 'File yang diunggah harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus JPEG, PNG, JPG, atau GIF.',
+            'image.max' => 'Ukuran gambar tidak boleh lebih dari 2MB.',
         ]);
 
         $post = new Post();
@@ -121,7 +135,7 @@ class PostController extends Controller
 
         $redirectRoute = $post->status === 'published' ? 'home' : 'user.posts.drafts';
         return redirect()->route($redirectRoute)
-            ->with('success', 'Artikel berhasil disimpan ' . ($post->status === 'published' ? 'dan dipublikasikan' : 'sebagai draft'));
+            ->with('success', 'Artikel berhasil disimpan ' . ($post->status === 'published' ? 'dan dipublikasikan !' : 'sebagai draft !'));
     }
 
     /**
@@ -161,6 +175,18 @@ class PostController extends Controller
             'category_id' => 'required|exists:categories,id',
             'subcategory_id' => 'nullable|exists:sub_categories,id',
             'image' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048',
+        ], [
+            'title.required' => 'Judul artikel harus diisi.',
+            'title.string' => 'Judul artikel harus berupa teks.',
+            'title.max' => 'Judul artikel tidak boleh lebih dari 255 karakter.',
+            'content.required' => 'Isi artikel harus diisi.',
+            'content.string' => 'Isi artikel harus berupa teks.',
+            'category_id.required' => 'Kategori harus dipilih.',
+            'category_id.exists' => 'Kategori yang dipilih tidak valid.',
+            'subcategory_id.exists' => 'Sub kategori yang dipilih tidak valid.',
+            'image.image' => 'File yang diunggah harus berupa gambar.',
+            'image.mimes' => 'Format gambar harus JPEG, PNG, JPG, atau GIF.',
+            'image.max' => 'Ukuran gambar tidak boleh lebih dari 2MB.',
         ]);
 
         if ($request->hasFile('image')) {
@@ -217,7 +243,7 @@ class PostController extends Controller
         ]);
 
         return redirect()->route('home')
-            ->with('success', 'Artikel berhasil dipublikasikan!');
+            ->with('success', 'Artikel berhasil dipublikasikan !');
     }
 
     /**
@@ -241,11 +267,11 @@ class PostController extends Controller
         // Redirect to the appropriate page based on the post status
         $redirectRoute = $post->status === 'published' ? 'home' : 'posts.drafts';
         return redirect()->route($redirectRoute)
-            ->with('success', 'Artikel berhasil dihapus.');
+            ->with('success', 'Artikel berhasil dihapus !.');
     }
 
     /**
-     * Search posts by title or content
+     * Search posts by title, content, category, or subcategory
      */
     public function search(Request $request)
     {
@@ -256,11 +282,19 @@ class PostController extends Controller
         // Cek jika input search tidak kosong
         if ($searchQuery != "") {
             // LIKE : mencari kata yang mengandung teks tertentu
-            // % didepan : mencari kata belakang, % di belakang : mencari data di depan, % depan belakang : mencari di depan tengah belakang
             $posts = Post::where('status', 'published')
                 ->where(function ($query) use ($searchQuery) {
+                    // Cari dari title dan content
                     $query->where('title', 'LIKE', '%' . $searchQuery . '%')
-                        ->orWhere('content', 'LIKE', '%' . $searchQuery . '%');
+                        ->orWhere('content', 'LIKE', '%' . $searchQuery . '%')
+                        // Cari dari nama kategori melalui relationship
+                        ->orWhereHas('category', function ($q) use ($searchQuery) {
+                            $q->where('name', 'LIKE', '%' . $searchQuery . '%');
+                        })
+                        // Cari dari nama sub kategori melalui relationship
+                        ->orWhereHas('subCategory', function ($q) use ($searchQuery) {
+                            $q->where('name', 'LIKE', '%' . $searchQuery . '%');
+                        });
                 })
                 ->with(['category', 'user', 'subCategory'])
                 ->latest('published_at')

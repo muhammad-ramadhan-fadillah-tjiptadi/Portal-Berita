@@ -14,7 +14,7 @@
                         @method('PUT')
 
                         <div class="mb-3">
-                            <label for="title" class="form-label">Judul Artikel</label>
+                            <label for="title" class="form-label">Judul Artikel <span class="text-danger">*</span></label>
                             <input type="text" class="form-control" id="title" name="title" value="{{ old('title', $post->title) }}" required>
                         </div>
 
@@ -31,7 +31,7 @@
                         </div>
 
                         <div class="mb-3" id="subcategory-container">
-                            <label for="subcategory_id" class="form-label">Sub Kategori (Opsional)</label>
+                            <label for="subcategory_id" class="form-label">Sub Kategori</label>
                             <select class="form-select" id="subcategory_id" name="subcategory_id">
                                 <option value="">Pilih Sub Kategori</option>
                                 @foreach($subcategories as $subcategory)
@@ -53,7 +53,7 @@
                         </div>
 
                         <div class="mb-3">
-                            <label for="content" class="form-label">Isi Artikel</label>
+                            <label for="content" class="form-label">Isi Artikel <span class="text-danger">*</span></label>
                             <textarea class="form-control" id="content" name="content" rows="10" required>{{ old('content', $post->content) }}</textarea>
                         </div>
 

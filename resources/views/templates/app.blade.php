@@ -139,7 +139,7 @@
             transition: color 0.3s ease;
         }
 
-        .search-input:focus ~ .search-btn .search-icon {
+        .search-input:focus~.search-btn .search-icon {
             color: var(--accent-color);
         }
 
@@ -358,8 +358,8 @@
                         <form class="search-form" method="GET" action="{{ route('posts.search') }}">
                             @csrf
                             <div class="search-container">
-                                <input type="text" name="search_post" class="search-input" placeholder="Cari berita..."
-                                    aria-label="Search" aria-describedby="search-addon"
+                                <input type="text" name="search_post" class="search-input"
+                                    placeholder="Cari berita..." aria-label="Search" aria-describedby="search-addon"
                                     value="{{ request('search_post') }}" />
                                 <button type="submit" class="search-btn">
                                     <i class="fas fa-search search-icon"></i>
@@ -371,8 +371,8 @@
                     <!-- Avatar Dropdown - Hide for admin -->
                     @if (!Auth::check() || (Auth::check() && Auth::user()->role !== 'admin'))
                         <div class="dropdown">
-                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#" id="userDropdown"
-                                role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                                id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
                                     height="40" width="40" alt="User Profile" loading="lazy">
                             </a>
@@ -389,8 +389,6 @@
                                             Saya</a></li>
                                     <li><a class="dropdown-item" href="#"><i
                                                 class="fas fa-comment me-2"></i>Comment Saya</a></li>
-                                    <li><a class="dropdown-item" href="#"><i
-                                                class="fas fa-cog me-2"></i>Pengaturan</a></li>
                                     <li>
                                         <hr class="dropdown-divider">
                                     </li>
