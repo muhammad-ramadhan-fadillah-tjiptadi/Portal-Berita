@@ -373,14 +373,20 @@
                         <div class="dropdown">
                             <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
                                 id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
-                                    height="40" width="40" alt="User Profile" loading="lazy">
+                                @if (Auth::check())
+                                    <span class="badge bg-primary rounded-circle"
+                                        style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 0.9rem; font-weight: 700;"
+                                        title="{{ Auth::user()->name }}">
+                                        {{ Auth::user()->getInitials() }}
+                                    </span>
+                                @else
+                                    <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
+                                        height="40" width="40" alt="User Profile" loading="lazy">
+                                @endif
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
                                 @if (Auth::check())
                                     <!-- User Menu -->
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-user me-2"></i>Profil
-                                            Saya</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.create') }}"><i
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
