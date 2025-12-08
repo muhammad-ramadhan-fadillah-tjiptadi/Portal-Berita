@@ -131,9 +131,5 @@
                 </tr>
             @endforelse
         </table>
-
-        <div class="mt-3">
-            {{ $subcategories->links() }}
-        </div>
     </div>
 @endsection

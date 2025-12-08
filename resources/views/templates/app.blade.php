@@ -380,8 +380,10 @@
                                         {{ Auth::user()->getInitials() }}
                                     </span>
                                 @else
-                                    <img src="https://mdbcdn.b-cdn.net/img/new/avatars/2.webp" class="rounded-circle"
-                                        height="40" width="40" alt="User Profile" loading="lazy">
+                                    <span class="rounded-circle d-flex align-items-center justify-content-center"
+                                        style="width: 40px; height: 40px; background-color: #e9ecef; color: #6c757d;">
+                                        <i class="fas fa-user"></i>
+                                    </span>
                                 @endif
                             </a>
                             <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">

@@ -18,7 +18,7 @@ class CategorieController extends Controller
     {
         $categories = Categorie::withCount('posts')
             ->latest()
-            ->paginate(10);
+            ->get();
 
         return view('admin.categories.index', compact('categories'));
     }

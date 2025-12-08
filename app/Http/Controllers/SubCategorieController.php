@@ -13,7 +13,7 @@ class SubCategorieController extends Controller
 {
     public function index()
     {
-        $subcategories = SubCategorie::with('category')->latest()->paginate(10);
+        $subcategories = SubCategorie::with('category')->latest()->get();
         return view('admin.subcategories.index', compact('subcategories'));
     }
 
