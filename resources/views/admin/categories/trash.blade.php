@@ -36,6 +36,23 @@
             color: #842029;
         }
 
+        .btn-alert-secondary {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-alert-secondary:hover {
+            background-color: #d1d3d6;
+            color: #383d41;
+        }
+
         .btn-alert-primary {
             background-color: #cfe2ff;
             color: #084298;
@@ -63,7 +80,7 @@
     <div class="container my-5">
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Data Sampah Kategori</h3>
-            <a href="{{ route('admin.categories.index') }}" class="btn btn-alert-primary">
+            <a href="{{ route('admin.categories.index') }}" class="btn btn-alert-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
         </div>

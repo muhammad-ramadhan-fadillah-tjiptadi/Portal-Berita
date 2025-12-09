@@ -3,7 +3,7 @@
 @section('content')
     <div class="container py-5">
         <div class="d-flex justify-content-between align-items-center mb-5">
-            <h1 class="fw-bold">Draft Artikel</h1>
+            <h1 class="fw-bold">Artikel Saya</h1>
             <a href="{{ route('user.posts.create') }}" class="btn-alert-primary">
                 <i class="fas fa-plus me-1"></i> Buat Artikel Baru
             </a>
@@ -16,24 +16,24 @@
             </div>
         @endif
 
-        @if ($drafts->isEmpty())
+        @if ($articles->isEmpty())
             <div class="col-12">
                 <div class="alert alert-info">
-                    <i class="fas fa-info-circle me-2"></i> Tidak ada draft artikel yang tersedia.
+                    <i class="fas fa-info-circle me-2"></i> Belum ada artikel yang dipublikasikan.
                 </div>
             </div>
         @else
             <div class="row g-4">
-                @foreach ($drafts as $draft)
+                @foreach ($articles as $article)
                     <div class="col-12 col-md-6 col-lg-4">
                         <div class="card h-100 border-0 shadow-sm overflow-hidden">
-                            @if ($draft->image)
+                            @if ($article->image)
                                 <div class="position-relative overflow-hidden" style="height: 200px;">
-                                    <img src="{{ asset('storage/' . $draft->image) }}" class="w-100 h-100"
-                                        style="object-fit: cover;" alt="{{ $draft->title }}">
+                                    <img src="{{ asset('storage/' . $article->image) }}" class="w-100 h-100"
+                                        style="object-fit: cover;" alt="{{ $article->title }}">
                                     <div class="position-absolute top-0 end-0 m-3">
-                                        <span class="badge bg-{{ $draft->status === 'published' ? 'success' : 'warning' }}">
-                                            {{ $draft->status === 'published' ? 'Published' : 'Draft' }}
+                                        <span class="badge bg-success">
+                                            Published
                                         </span>
                                     </div>
                                 </div>
@@ -42,38 +42,37 @@
                                 <div class="d-flex align-items-center mb-3">
                                     <div class="text-muted small">
                                         <i class="far fa-clock me-1"></i>
-                                        {{ $draft->updated_at->diffForHumans() }}
+                                        {{ ($article->published_at ?? $article->created_at)->diffForHumans() }}
                                     </div>
                                     <span class="mx-2 text-muted">•</span>
                                     <div class="text-muted small">
                                         <i class="fas fa-tag me-1"></i>
-                                        {{ $draft->category->name ?? 'Tanpa Kategori' }}
+                                        {{ $article->category->name ?? 'Tanpa Kategori' }}
                                     </div>
                                 </div>
                                 <h2 class="h5 fw-bold mb-3">
-                                    {{ $draft->title }}
+                                    {{ $article->title }}
                                 </h2>
                                 <p class="text-muted mb-4">
-                                    {{ Str::limit(strip_tags($draft->content), 100) }}
+                                    {{ Str::limit(strip_tags($article->content), 100) }}
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('user.posts.edit', $draft) }}" class="btn btn-sm btn-alert-primary">
-                                        <i class="fas fa-edit me-1"></i> Edit
+                                    <a href="{{ route('posts.show', $article) }}" class="btn btn-sm btn-alert-primary"
+                                        target="_blank">
+                                        <i class="fas fa-eye me-1"></i> Lihat
                                     </a>
                                     <div class="d-flex">
-                                        <form action="{{ route('user.posts.publish', $draft) }}" method="POST"
-                                            class="me-2">
-                                            @csrf
-                                            <button type="submit" class="btn btn-sm btn-alert-success">
-                                                <i class="fas fa-upload me-1"></i> Publish
-                                            </button>
-                                        </form>
-                                        <form action="{{ route('user.posts.destroy', $draft) }}" method="POST">
+                                        <a href="{{ route('user.posts.edit', $article) }}"
+                                            class="btn btn-sm btn-alert-primary me-2">
+                                            <i class="fas fa-edit me-1"></i> Edit
+                                        </a>
+                                        <form action="{{ route('user.posts.destroy', $article) }}" method="POST">
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
                                                 class="btn btn-sm btn-alert-danger d-flex align-items-center justify-content-center"
-                                                style="width: 36px; height: 32px;">
+                                                style="width: 36px; height: 32px;"
+                                                onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -85,10 +84,10 @@
                 @endforeach
             </div>
 
-            @if ($drafts->hasPages())
+            @if ($articles->hasPages())
                 <div class="d-flex justify-content-center mt-5">
                     <nav aria-label="Page navigation">
-                        {{ $drafts->onEachSide(1)->links() }}
+                        {{ $articles->onEachSide(1)->links() }}
                     </nav>
                 </div>
             @endif
@@ -105,17 +104,6 @@
         .btn-alert-primary:hover {
             background-color: #bacff7;
             color: #084298;
-        }
-
-        .btn-alert-success {
-            background-color: #d1e7dd;
-            color: #0f5132;
-            border: 1px solid #badbcc;
-        }
-
-        .btn-alert-success:hover {
-            background-color: #c2e0d8;
-            color: #0f5132;
         }
 
         .btn-alert-danger {
@@ -135,7 +123,6 @@
         }
 
         .btn-alert-primary,
-        .btn-alert-success,
         .btn-alert-danger {
             text-decoration: none;
             padding: 0.25rem 0.5rem;
@@ -154,11 +141,6 @@
         .card:hover {
             transform: translateY(-5px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
-        }
-
-        .btn-outline-primary {
-            border-radius: 20px;
-            padding: 0.375rem 1rem;
         }
 
         .badge {

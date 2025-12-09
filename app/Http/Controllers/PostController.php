@@ -265,9 +265,24 @@ class PostController extends Controller
         $post->delete();
 
         // Redirect to the appropriate page based on the post status
-        $redirectRoute = $post->status === 'published' ? 'home' : 'posts.drafts';
+        $redirectRoute = $post->status === 'published' ? 'home' : 'user.posts.drafts';
         return redirect()->route($redirectRoute)
-            ->with('success', 'Artikel berhasil dihapus !.');
+            ->with('success', 'Artikel berhasil dihapus !');
+    }
+
+    /**
+     * Display a listing of the user's published articles.
+     */
+    public function myArticles()
+    {
+        $articles = Post::where('user_id', auth('web')->id())
+            ->where('status', 'published')
+            ->with(['category', 'user'])
+            ->orderBy('published_at', 'desc')
+            ->orderBy('created_at', 'desc')
+            ->paginate(9);
+
+        return view('posts.my-articles', compact('articles'));
     }
 
     /**

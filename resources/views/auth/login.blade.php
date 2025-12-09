@@ -123,6 +123,7 @@
         .login-form-wrapper {
             width: 100%;
             max-width: 420px;
+            padding: 0 20px;
         }
 
         .login-header {
@@ -255,23 +256,44 @@
 
         /* Footer Link */
         .login-footer {
+            margin-top: 30px;
             text-align: center;
-            margin-top: 24px;
-            padding-top: 20px;
-            border-top: 1px solid var(--neutral-200);
         }
 
-        .login-footer a {
+        /* Divider */
+        .auth-divider {
+            height: 1px;
+            background-color: var(--neutral-200);
+            margin: 32px 0;
+            width: 100%;
+        }
+
+        .auth-footer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+            margin-top: 24px;
+            padding: 0 16px;
+            font-size: 14px;
+            color: var(--neutral-600);
+            text-align: center;
+        }
+
+        .auth-footer .text-muted {
+            color: var(--neutral-600);
+        }
+
+        .auth-footer .auth-link {
             color: var(--primary-color);
             text-decoration: none;
-            font-size: 14px;
             font-weight: 500;
-            transition: color 0.3s ease;
+            display: inline-flex;
+            align-items: center;
         }
 
-        .login-footer a:hover {
-            color: var(--primary-dark);
-            text-decoration: underline;
+        .auth-footer .divider {
+            color: var(--neutral-300);
         }
 
         /* Responsive Design */
@@ -420,11 +442,19 @@
                     </button>
                 </form>
 
-                <!-- Footer Link -->
-                <div class="login-footer">
-                    <a href="{{ route('home') }}">
+                <!-- Divider -->
+                <div class="auth-divider"></div>
+
+                <!-- Footer Links -->
+                <div class="auth-footer">
+                    <span class="text-muted">Belum punya akun?</span>
+                    <a href="{{ route('signup') }}" class="auth-link">
+                        Daftar di sini
+                    </a>
+                    <span class="divider">|</span>
+                    <a href="{{ route('home') }}" class="auth-link">
                         <i class="fas fa-arrow-left me-1"></i>
-                        Kembali ke Beranda
+                        Beranda
                     </a>
                 </div>
             </div>

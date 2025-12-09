@@ -53,9 +53,27 @@
             color: #084298;
         }
 
+        .btn-alert-secondary {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d6d8db;
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-alert-secondary:hover {
+            background-color: #d1d3d6;
+            color: #383d41;
+        }
+
         .btn-sm.btn-alert-success,
         .btn-sm.btn-alert-danger,
-        .btn-sm.btn-alert-primary {
+        .btn-sm.btn-alert-primary,
+        .btn-sm.btn-alert-secondary {
             padding: 0.25rem 0.5rem;
             font-size: 0.875rem;
         }
@@ -67,7 +85,7 @@
 
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Sub Kategori Terhapus</h3>
-            <a href="{{ route('admin.subcategories.index') }}" class="btn btn-alert-primary">
+            <a href="{{ route('admin.subcategories.index') }}" class="btn btn-alert-secondary">
                 <i class="fas fa-arrow-left me-1"></i> Kembali
             </a>
         </div>

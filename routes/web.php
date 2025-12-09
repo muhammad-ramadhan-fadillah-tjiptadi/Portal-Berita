@@ -87,13 +87,15 @@ Route::middleware('isUser')->group(function () {
             Route::post('', [PostController::class, 'store'])->name('store');
             // Drafts
             Route::get('/drafts', [PostController::class, 'drafts'])->name('drafts');
+            // My Articles
+            Route::get('/my-articles', [PostController::class, 'myArticles'])->name('my-articles');
             // Edit/Update
-            Route::get('/{post:slug}/edit', [PostController::class, 'edit'])->name('edit');
-            Route::put('/{post:slug}', [PostController::class, 'update'])->name('update');
+            Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
+            Route::put('/{post}', [PostController::class, 'update'])->name('update');
             // Publish
             Route::post('/{post}/publish', [PostController::class, 'publish'])->name('publish');
             // Delete
-            Route::delete('/{post:slug}', [PostController::class, 'destroy'])->name('destroy');
+            Route::delete('/{post}', [PostController::class, 'destroy'])->name('destroy');
         });
     });
 });

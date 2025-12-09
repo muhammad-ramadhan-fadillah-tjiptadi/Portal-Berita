@@ -393,8 +393,8 @@
                                                 class="fas fa-plus-circle me-2"></i>Tambah Artikel</a></li>
                                     <li><a class="dropdown-item" href="{{ route('user.posts.drafts') }}"><i
                                                 class="fas fa-file-alt me-2"></i>Draft Artikel</a></li>
-                                    <li><a class="dropdown-item" href="#"><i class="fas fa-file me-2"></i>Post
-                                            Saya</a></li>
+                                    <li><a class="dropdown-item" href="{{ route('user.posts.my-articles') }}"><i
+                                                class="fas fa-file me-2"></i>Artikel Saya</a></li>
                                     <li><a class="dropdown-item" href="#"><i
                                                 class="fas fa-comment me-2"></i>Comment Saya</a></li>
                                     <li>
