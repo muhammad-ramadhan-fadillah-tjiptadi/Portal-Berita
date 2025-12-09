@@ -241,10 +241,12 @@
                                         <i class="fas fa-arrow-left me-1"></i> Kembali
                                     </a>
                                     <div class="d-flex gap-2">
-                                        <button type="submit" name="publish" value="0" class="btn-alert-success">
-                                            <i class="fas fa-save me-1"></i> Simpan Ke Draft
+                                        <button type="submit" name="status" value="draft"
+                                            class="btn btn-alert-primary me-2">
+                                            <i class="fas fa-save me-1"></i> Simpan sebagai Draft
                                         </button>
-                                        <button type="submit" name="publish" value="1" class="btn-alert-primary">
+                                        <button type="submit" name="status" value="published"
+                                            class="btn btn-alert-success">
                                             <i class="fas fa-upload me-1"></i> Publish
                                         </button>
                                     </div>

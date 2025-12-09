@@ -147,6 +147,11 @@ class PostController extends Controller
             abort(404);
         }
 
+        // Eager load comments with user relationship
+        $post->load(['comments' => function ($query) {
+            $query->with('user')->latest();
+        }]);
+
         $categories = Categorie::all();
         // Get 3 latest published posts excluding the current one
         $relatedPosts = Post::where('id', '!=', $post->id)
