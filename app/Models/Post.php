@@ -48,8 +48,36 @@ class Post extends Model
     /**
      * Get all of the comments for the post.
      */
+    /**
+     * Get all of the comments for the post.
+     */
     public function comments()
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(Comment::class)->withTrashed();
+    }
+
+    /**
+     * The "booting" method of the model.
+     *
+     * @return void
+     */
+    protected static function boot()
+    {
+        parent::boot();
+
+        static::deleting(function ($post) {
+            if ($post->isForceDeleting()) {
+                // If force deleting, also force delete all comments
+                $post->comments()->forceDelete();
+            } else {
+                // If soft deleting, soft delete all comments
+                $post->comments()->delete();
+            }
+        });
+
+        static::restoring(function ($post) {
+            // When restoring a post, also restore its comments
+            $post->comments()->onlyTrashed()->restore();
+        });
     }
 }

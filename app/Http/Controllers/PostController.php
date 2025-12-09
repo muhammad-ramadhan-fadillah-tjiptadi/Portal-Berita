@@ -116,7 +116,7 @@ class PostController extends Controller
         $post->user_id = auth('web')->id();
 
         // Handle publish status
-        $post->status = $request->has('publish') && $request->input('publish') == '1' ? 'published' : 'draft';
+        $post->status = $request->input('status', 'draft');
 
         // Handle image upload
         if ($request->hasFile('image') && $request->file('image')->isValid()) {
@@ -147,9 +147,9 @@ class PostController extends Controller
             abort(404);
         }
 
-        // Eager load comments with user relationship
+        // Eager load comments with user relationship (excluding soft-deleted)
         $post->load(['comments' => function ($query) {
-            $query->with('user')->latest();
+            $query->with('user')->latest()->whereNull('deleted_at');
         }]);
 
         $categories = Categorie::all();

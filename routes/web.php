@@ -97,6 +97,10 @@ Route::middleware('isUser')->group(function () {
             Route::get('/drafts', [PostController::class, 'drafts'])->name('drafts');
             // My Articles
             Route::get('/my-articles', [PostController::class, 'myArticles'])->name('my-articles');
+
+            // User Comments
+            Route::get('/my-comments', [\App\Http\Controllers\CommentController::class, 'myComments'])->name('my-comments');
+
             // Edit/Update
             Route::get('/{post}/edit', [PostController::class, 'edit'])->name('edit');
             Route::put('/{post}', [PostController::class, 'update'])->name('update');

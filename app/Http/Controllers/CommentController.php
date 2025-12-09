@@ -32,22 +32,37 @@ class CommentController extends Controller
     /**
      * Remove the specified comment from storage.
      */
-    public function destroy(Comment $comment)
+    public function destroy($id)
     {
+        $comment = Comment::withTrashed()->findOrFail($id);
+
         if (Auth::id() !== $comment->user_id) {
             abort(403, 'Unauthorized action.');
         }
 
-        $comment->delete();
+        // If already soft-deleted, force delete
+        if ($comment->trashed()) {
+            $comment->forceDelete();
+        } else {
+            $comment->delete();
+        }
 
+        // Check if we're coming from the my-comments page
+        if (str_contains(url()->previous(), 'my-comments')) {
+            return back()->with('success', 'Komentar berhasil dihapus !');
+        }
+
+        // Otherwise, redirect back to the post
         return back()->with('success', 'Komentar berhasil dihapus !');
     }
 
     /**
      * Show the form for editing the specified comment.
      */
-    public function edit(Comment $comment)
+    public function edit($id)
     {
+        $comment = Comment::withTrashed()->findOrFail($id);
+
         if (Auth::id() !== $comment->user_id) {
             abort(403, 'Unauthorized action.');
         }
@@ -63,8 +78,10 @@ class CommentController extends Controller
     /**
      * Update the specified comment in storage.
      */
-    public function update(Request $request, Comment $comment)
+    public function update(Request $request, $id)
     {
+        $comment = Comment::withTrashed()->findOrFail($id);
+
         if (Auth::id() !== $comment->user_id) {
             abort(403, 'Unauthorized action.');
         }
@@ -77,10 +94,30 @@ class CommentController extends Controller
             'content' => $request->content,
         ]);
 
+        // If the comment was soft-deleted, restore it
+        if ($comment->trashed()) {
+            $comment->restore();
+        }
+
         // Redirect back to the stored URL or to the post
         $redirectUrl = session('comment_redirect', route('posts.show', $comment->post));
         session()->forget('comment_redirect');
 
         return redirect($redirectUrl)->with('success', 'Komentar berhasil diperbarui!');
+    }
+
+    /**
+     * Display all comments made by the authenticated user
+     */
+    public function myComments()
+    {
+        $comments = Comment::where('user_id', Auth::id())
+            ->with(['post' => function ($query) {
+                $query->with(['category', 'subCategory']);
+            }])
+            ->latest()
+            ->paginate(10);
+
+        return view('comments.my-comments', compact('comments'));
     }
 }

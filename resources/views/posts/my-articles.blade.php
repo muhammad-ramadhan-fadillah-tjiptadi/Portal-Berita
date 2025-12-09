@@ -57,7 +57,7 @@
                                     {{ Str::limit(strip_tags($article->content), 100) }}
                                 </p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <a href="{{ route('posts.show', $article) }}" class="btn btn-sm btn-alert-primary"
+                                    <a href="{{ route('posts.show', $article) }}" class="btn btn-sm btn-view"
                                         target="_blank">
                                         <i class="fas fa-eye me-1"></i> Lihat
                                     </a>
@@ -71,8 +71,7 @@
                                             @method('DELETE')
                                             <button type="submit"
                                                 class="btn btn-sm btn-alert-danger d-flex align-items-center justify-content-center"
-                                                style="width: 36px; height: 32px;"
-                                                onclick="return confirm('Apakah Anda yakin ingin menghapus artikel ini?')">
+                                                style="width: 36px; height: 32px;">
                                                 <i class="fas fa-trash"></i>
                                             </button>
                                         </form>
@@ -120,6 +119,17 @@
 
         .btn-alert-danger i {
             font-size: 1rem;
+        }
+
+        .btn-view {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .btn-view:hover {
+            background-color: #c3e6cb;
+            color: #155724;
         }
 
         .btn-alert-primary,
