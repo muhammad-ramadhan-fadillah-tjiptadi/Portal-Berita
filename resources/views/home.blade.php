@@ -144,7 +144,8 @@
                                 </div>
                             </div>
                             <h2 class="h4 fw-bold mb-3">
-                                <a href="{{ route('posts.show', $post) }}" class="text-decoration-none text-dark hover-text-primary">
+                                <a href="{{ route('posts.show', $post) }}"
+                                    class="text-decoration-none text-dark hover-text-primary">
                                     {{ $post->title }}
                                 </a>
                             </h2>

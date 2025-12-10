@@ -103,7 +103,7 @@ class CommentController extends Controller
         $redirectUrl = session('comment_redirect', route('posts.show', $comment->post));
         session()->forget('comment_redirect');
 
-        return redirect($redirectUrl)->with('success', 'Komentar berhasil diperbarui!');
+        return redirect($redirectUrl)->with('success', 'Komentar berhasil diperbarui !');
     }
 
     /**

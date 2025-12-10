@@ -205,8 +205,9 @@ class PostController extends Controller
         // Update the post with validated data
         $post->update($validated);
 
-        // Redirect back to drafts list with success message
-        return redirect()->route('user.posts.drafts')
+        // Redirect to appropriate page based on post status
+        $redirectRoute = $post->status === 'published' ? 'user.posts.my-articles' : 'user.posts.drafts';
+        return redirect()->route($redirectRoute)
             ->with('success', 'Artikel berhasil diperbarui');
     }
 

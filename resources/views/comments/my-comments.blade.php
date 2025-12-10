@@ -2,6 +2,13 @@
 
 @section('content')
     <div class="container py-5">
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="row justify-content-center">
             <div class="col-lg-10">
                 <div class="card border-0 shadow-sm">
@@ -103,6 +110,18 @@
     </div>
 
     <style>
+        .alert {
+            border-radius: 8px;
+            border: none;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .alert-success {
+            background-color: #d1e7dd;
+            color: #0f5132;
+            /* border-left: 4px solid #198754; */
+        }
+
         .list-group-item {
             padding: 1.25rem;
             transition: background-color 0.2s;
