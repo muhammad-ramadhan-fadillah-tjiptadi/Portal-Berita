@@ -147,9 +147,11 @@ class PostController extends Controller
             abort(404);
         }
 
-        // Eager load comments with user relationship (excluding soft-deleted)
+        // Eager load comments with user relationship (excluding soft-deleted) and their replies
         $post->load(['comments' => function ($query) {
-            $query->with('user')->latest()->whereNull('deleted_at');
+            $query->with('user')->with(['replies' => function ($replyQuery) {
+                $replyQuery->with('user')->whereNull('deleted_at');
+            }])->latest()->whereNull('deleted_at');
         }]);
 
         $categories = Categorie::all();

@@ -30,6 +30,27 @@ class CommentController extends Controller
     }
 
     /**
+     * Store a reply to a comment.
+     */
+    public function reply(Request $request, Comment $comment)
+    {
+        $request->validate([
+            'content' => 'required|string|max:1000',
+        ]);
+
+        $reply = new Comment([
+            'content' => $request->content,
+            'user_id' => Auth::id(),
+            'post_id' => $comment->post_id,
+            'parent_id' => $comment->id,
+        ]);
+
+        $reply->save();
+
+        return back()->with('success', 'Balasan berhasil ditambahkan !');
+    }
+
+    /**
      * Remove the specified comment from storage.
      */
     public function destroy($id)

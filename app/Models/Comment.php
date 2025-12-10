@@ -13,6 +13,7 @@ class Comment extends Model
         'post_id',
         'user_id',
         'content',
+        'parent_id',
     ];
 
     protected $casts = [
@@ -35,5 +36,21 @@ class Comment extends Model
     public function user()
     {
         return $this->belongsTo(User::class);
+    }
+
+    /**
+     * Get the parent comment.
+     */
+    public function parent()
+    {
+        return $this->belongsTo(Comment::class, 'parent_id');
+    }
+
+    /**
+     * Get the replies for the comment.
+     */
+    public function replies()
+    {
+        return $this->hasMany(Comment::class, 'parent_id');
     }
 }

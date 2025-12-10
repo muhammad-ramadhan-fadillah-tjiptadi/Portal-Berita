@@ -71,18 +71,18 @@
                     @endauth
 
                     <div class="comments-list">
-                        @forelse($post->comments as $comment)
+                        @forelse($post->comments->where('parent_id', null) as $comment)
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
                                         <div class="d-flex align-items-center">
                                             <img src="{{ $comment->user->getProfilePhotoUrl() }}"
-                                                 alt="{{ $comment->user->name }}"
-                                                 class="rounded-circle me-2"
-                                                 style="width: 32px; height: 32px; object-fit: cover;">
+                                                alt="{{ $comment->user->name }}" class="rounded-circle me-2"
+                                                style="width: 32px; height: 32px; object-fit: cover;">
                                             <div>
                                                 <h6 class="mb-1 fw-bold">{{ $comment->user->name }}</h6>
-                                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                                <small
+                                                    class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
                                             </div>
                                         </div>
                                         @if (auth()->check() && auth()->id() === $comment->user_id)
@@ -105,7 +105,83 @@
                                             </div>
                                         @endif
                                     </div>
-                                    <p class="mb-0">{{ $comment->content }}</p>
+                                    <p class="mb-2">{{ $comment->content }}</p>
+
+                                    <div class="d-flex gap-1 mb-2">
+                                        @auth
+                                            <button class="btn btn-sm p-0 reply-btn text-primary"
+                                                style="background: none; border: none;" title="Balas komentar"
+                                                onclick="toggleReplyForm({{ $comment->id }})">
+                                                <i class="fas fa-reply me-1"></i> Balas
+                                            </button>
+                                        @endauth
+                                    </div>
+                                    @auth
+                                        <div id="reply-form-{{ $comment->id }}" class="reply-form" style="display: none;">
+                                            <div class="mt-3 p-3 rounded">
+                                                <form action="{{ route('comments.reply', $comment) }}" method="POST">
+                                                    @csrf
+                                                    <div class="form-group mb-2">
+                                                        <textarea name="content" class="form-control" rows="2" placeholder="Tulis balasan..." required></textarea>
+                                                    </div>
+                                                    <div class="d-flex gap-2">
+                                                        <button type="submit" class="btn btn-sm btn-primary">Balas</button>
+                                                        <button type="button" class="btn btn-sm btn-secondary"
+                                                            onclick="toggleReplyForm({{ $comment->id }})">Batal</button>
+                                                    </div>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    @endauth
+
+                                    <!-- Display Replies -->
+                                    @if ($comment->replies->count() > 0)
+                                        <div class="replies mt-3 ps-4">
+                                            <div class="small text-primary mb-2 ms-2">
+                                                <i class="fas fa-reply me-1"></i> {{ $comment->replies->count() }} balasan
+                                            </div>
+                                            @foreach ($comment->replies as $reply)
+                                                <div class="d-flex mb-2 p-2 rounded-start">
+                                                    <img src="{{ $reply->user->getProfilePhotoUrl() }}"
+                                                        alt="{{ $reply->user->name }}" class="rounded-circle me-2"
+                                                        style="width: 20px; height: 20px; object-fit: cover;">
+                                                    <div class="flex-grow-1">
+                                                        <div class="d-flex align-items-center mb-1">
+                                                            <strong class="me-2"
+                                                                style="font-size: 0.95rem;">{{ $reply->user->name }}</strong>
+                                                            <small class="text-muted">>
+                                                                <strong>{{ $comment->user->name }}</strong> •
+                                                                {{ $reply->created_at->diffForHumans() }}</small>
+                                                        </div>
+                                                        <p class="mb-0" style="font-size: 0.9rem;">
+                                                            {{ $reply->content }}</p>
+                                                    </div>
+                                                    @if (auth()->check() && auth()->id() === $reply->user_id)
+                                                        <div class="d-flex gap-1">
+                                                            <a href="{{ route('comments.edit', $reply) }}"
+                                                                class="btn btn-sm p-0"
+                                                                style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center; background-color: #e7f1ff; border: 1px solid #b3d1ff;"
+                                                                title="Edit balasan">
+                                                                <i class="fas fa-edit"
+                                                                    style="color: #0d6efd; font-size: 12px;"></i>
+                                                            </a>
+                                                            <form action="{{ route('comments.destroy', $reply) }}"
+                                                                method="POST" class="d-inline">
+                                                                @csrf
+                                                                @method('DELETE')
+                                                                <button type="submit"
+                                                                    class="btn btn-sm btn-alert-danger p-0"
+                                                                    style="width: 24px; height: 24px; display: flex; align-items: center; justify-content: center;"
+                                                                    title="Hapus balasan">
+                                                                    <i class="fas fa-trash" style="font-size: 12px;"></i>
+                                                                </button>
+                                                            </form>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            @endforeach
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
                         @empty
@@ -125,7 +201,8 @@
                                     <div class="card h-100 border-0 shadow-sm">
                                         @if ($relatedPost->image)
                                             <img src="{{ asset('storage/' . $relatedPost->image) }}" class="card-img-top"
-                                                alt="{{ $relatedPost->title }}" style="height: 180px; object-fit: cover;">
+                                                alt="{{ $relatedPost->title }}"
+                                                style="height: 180px; object-fit: cover;">
                                         @endif
                                         <div class="card-body">
                                             <h5 class="card-title">
@@ -204,8 +281,49 @@
 
         .hover-text-primary:hover {
             color: #0d6efd !important;
+            transition: color 0.2s ease;
+        }
+
+        .replies {
+            margin-left: 0;
+        }
+
+        .replies .bg-light {
+            background-color: #f8f9fa !important;
+            border-left: 3px solid #6c757d;
+            margin-left: 1rem;
+            margin-right: 1rem;
+        }
+
+        .replies .small {
+            font-size: 0.8rem;
+            color: #6c757d;
+        }
+
+        .replies .rounded-start {
+            border-radius: 0.375rem !important;
+        }
+
+        .replies img {
+            width: 20px !important;
+            height: 20px !important;
         }
     </style>
+
+    <script>
+        function toggleReplyForm(commentId) {
+            const replyForm = document.getElementById('reply-form-' + commentId);
+            replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';
+
+            // Clear textarea when hiding
+            if (replyForm.style.display === 'none') {
+                replyForm.querySelector('textarea').value = '';
+            } else {
+                // Focus on textarea when showing
+                replyForm.querySelector('textarea').focus();
+            }
+        }
+    </script>
 @endsection
 
 <!-- Edit functionality has been removed -->
