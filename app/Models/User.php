@@ -51,13 +51,24 @@ class User extends Authenticatable
 
     /**
      * Get user initials from name
-     * Returns first 2 characters of name (uppercase)
+     * Returns first letter of first name and first letter of last name (uppercase)
      *
      * @return string
      */
     public function getInitials()
     {
-        return strtoupper(substr($this->name, 0, 2));
+        $nameParts = explode(' ', trim($this->name));
+        $initials = '';
+
+        if (count($nameParts) >= 2) {
+            // Take first letter of first name and first letter of last name
+            $initials = strtoupper(substr($nameParts[0], 0, 1) . substr(end($nameParts), 0, 1));
+        } elseif (count($nameParts) == 1) {
+            // If only one name, take first 2 letters
+            $initials = strtoupper(substr($nameParts[0], 0, 2));
+        }
+
+        return $initials;
     }
 
     /**

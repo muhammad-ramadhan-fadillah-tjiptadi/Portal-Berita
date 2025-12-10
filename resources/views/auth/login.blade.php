@@ -167,13 +167,11 @@
         .alert-success {
             background-color: #d1fae5;
             color: #065f46;
-            border-left: 4px solid var(--success-color);
         }
 
         .alert-danger {
             background-color: #fee2e2;
             color: #7f1d1d;
-            border-left: 4px solid var(--danger-color);
         }
 
         /* Form Group */
