@@ -75,9 +75,15 @@
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="d-flex justify-content-between align-items-start mb-2">
-                                        <div>
-                                            <h6 class="mb-1 fw-bold">{{ $comment->user->name }}</h6>
-                                            <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                        <div class="d-flex align-items-center">
+                                            <img src="{{ $comment->user->getProfilePhotoUrl() }}"
+                                                 alt="{{ $comment->user->name }}"
+                                                 class="rounded-circle me-2"
+                                                 style="width: 32px; height: 32px; object-fit: cover;">
+                                            <div>
+                                                <h6 class="mb-1 fw-bold">{{ $comment->user->name }}</h6>
+                                                <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                                            </div>
                                         </div>
                                         @if (auth()->check() && auth()->id() === $comment->user_id)
                                             <div class="d-flex gap-1">

@@ -15,6 +15,12 @@ class Comment extends Model
         'content',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
     /**
      * Get the post that owns the comment.
      */

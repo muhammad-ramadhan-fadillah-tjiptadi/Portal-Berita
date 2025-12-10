@@ -23,6 +23,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'profile_photo',
     ];
 
     /**
@@ -57,5 +58,20 @@ class User extends Authenticatable
     public function getInitials()
     {
         return strtoupper(substr($this->name, 0, 2));
+    }
+
+    /**
+     * Get profile photo URL or return default avatar
+     *
+     * @return string
+     */
+    public function getProfilePhotoUrl()
+    {
+        if ($this->profile_photo) {
+            return asset('storage/' . $this->profile_photo);
+        }
+
+        // Return default avatar with initials
+        return "https://ui-avatars.com/api/?name=" . urlencode($this->name) . "&color=fff&background=0d6efd&size=40";
     }
 }

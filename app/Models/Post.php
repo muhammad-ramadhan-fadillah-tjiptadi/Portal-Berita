@@ -21,6 +21,13 @@ class Post extends Model
         'status',
     ];
 
+    protected $casts = [
+        'created_at' => 'datetime',
+        'updated_at' => 'datetime',
+        'published_at' => 'datetime',
+        'deleted_at' => 'datetime',
+    ];
+
     /**
      * Get the category that owns the post.
      */

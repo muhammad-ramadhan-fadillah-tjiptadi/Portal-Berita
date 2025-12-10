@@ -50,10 +50,9 @@
                                         </div>
                                         <div class="d-flex">
                                             <div class="flex-shrink-0 me-3">
-                                                <div class="bg-primary text-white rounded-circle d-flex align-items-center justify-content-center"
-                                                    style="width: 40px; height: 40px; font-size: 16px;">
-                                                    {{ substr(Auth::user()->name, 0, 1) }}
-                                                </div>
+                                                <img src="{{ Auth::user()->getProfilePhotoUrl() }}"
+                                                    alt="{{ Auth::user()->name }}" class="rounded-circle"
+                                                    style="width: 40px; height: 40px; object-fit: cover;">
                                             </div>
                                             <div class="flex-grow-1">
                                                 <div class="d-flex justify-content-between align-items-start">
