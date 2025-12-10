@@ -117,6 +117,12 @@
                                 <textarea class="form-control" id="content" name="content" rows="10" required>{{ old('content', $post->content) }}</textarea>
                             </div>
 
+                            <div class="mb-3">
+                                <label for="tags" class="form-label">Tags <span class="text-muted small">(Pisahkan
+                                        dengan koma)</span></label>
+                                <input type="text" class="form-control" id="tags" name="tags"
+                                    value="{{ old('tags', $post->tags->pluck('name')->implode(', ')) }}">
+                            </div>
                             <div class="d-flex justify-content-between align-items-center pt-3 border-top">
                                 <a href="{{ route('user.posts.drafts') }}" class="btn-alert-secondary">
                                     <i class="fas fa-arrow-left me-1"></i> Kembali

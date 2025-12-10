@@ -149,9 +149,27 @@
                                     {{ $post->title }}
                                 </a>
                             </h2>
-                            <p class="text-muted mb-4">
+                            <p class="text-muted mb-3">
                                 {{ Str::limit(strip_tags($post->content), 150) }}
                             </p>
+
+                            @if ($post->tags && $post->tags->count() > 0)
+                                <div class="mb-3">
+                                    <div class="d-flex flex-wrap gap-1">
+                                        @foreach ($post->tags->take(3) as $tag)
+                                            <span class="badge bg-light text-dark small">
+                                                {{ $tag->name }}
+                                            </span>
+                                        @endforeach
+                                        @if ($post->tags->count() > 3)
+                                            <span class="badge bg-light text-dark small">
+                                                +{{ $post->tags->count() - 3 }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+
                             <div class="mt-auto">
                                 <a href="{{ route('posts.show', $post) }}" class="btn btn-outline-primary w-100">
                                     Baca Selengkapnya <i class="fas fa-arrow-right ms-2"></i>

@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\Categorie;
 use App\Models\SubCategorie;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
@@ -20,7 +21,7 @@ class PostController extends Controller
     {
         $categories = Categorie::all();
         $posts = Post::where('status', 'published')
-            ->with('category', 'user')
+            ->with('category', 'user', 'tags')
             ->latest('published_at')
             ->paginate(6);
 
@@ -133,6 +134,22 @@ class PostController extends Controller
 
         $post->save();
 
+        // Handle tags
+        if ($request->has('tags')) {
+            $tagNames = array_filter(explode(',', $request->input('tags')));
+            $tagIds = [];
+
+            foreach ($tagNames as $tagName) {
+                $tagName = trim($tagName);
+                if (!empty($tagName)) {
+                    $tag = Tag::firstOrCreate(['name' => $tagName]);
+                    $tagIds[] = $tag->id;
+                }
+            }
+
+            $post->tags()->sync($tagIds);
+        }
+
         $redirectRoute = $post->status === 'published' ? 'home' : 'user.posts.drafts';
         return redirect()->route($redirectRoute)
             ->with('success', 'Artikel berhasil disimpan ' . ($post->status === 'published' ? 'dan dipublikasikan !' : 'sebagai draft !'));
@@ -152,7 +169,7 @@ class PostController extends Controller
             $query->with('user')->with(['replies' => function ($replyQuery) {
                 $replyQuery->with('user')->whereNull('deleted_at');
             }])->latest()->whereNull('deleted_at');
-        }]);
+        }, 'tags']);
 
         $categories = Categorie::all();
         // Get 3 latest published posts excluding the current one
@@ -170,6 +187,9 @@ class PostController extends Controller
     {
         $categories = Categorie::all();
         $subcategories = $post->category ? $post->category->subCategories : collect();
+
+        // Load tags for the post
+        $post->load('tags');
 
         return view('posts.edit', compact('post', 'categories', 'subcategories'));
     }
@@ -207,10 +227,29 @@ class PostController extends Controller
         // Update the post with validated data
         $post->update($validated);
 
+        // Handle tags
+        if ($request->has('tags')) {
+            $tagNames = array_filter(explode(',', $request->input('tags')));
+            $tagIds = [];
+
+            foreach ($tagNames as $tagName) {
+                $tagName = trim($tagName);
+                if (!empty($tagName)) {
+                    $tag = Tag::firstOrCreate(['name' => $tagName]);
+                    $tagIds[] = $tag->id;
+                }
+            }
+
+            $post->tags()->sync($tagIds);
+        } else {
+            // If no tags provided, remove all existing tags
+            $post->tags()->detach();
+        }
+
         // Redirect to appropriate page based on post status
         $redirectRoute = $post->status === 'published' ? 'user.posts.my-articles' : 'user.posts.drafts';
         return redirect()->route($redirectRoute)
-            ->with('success', 'Artikel berhasil diperbarui');
+            ->with('success', 'Artikel berhasil diperbarui !');
     }
 
     /**

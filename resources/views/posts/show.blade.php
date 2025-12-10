@@ -36,6 +36,19 @@
                         </div>
                     </div>
 
+                    @if ($post->tags && $post->tags->count() > 0)
+                        <div class="d-flex align-items-center mb-4">
+                            <i class="fas fa-tags me-2 text-primary"></i>
+                            <div class="d-flex flex-wrap gap-2">
+                                @foreach ($post->tags as $tag)
+                                    <span class="badge bg-secondary bg-opacity-10 text-secondary border border-secondary">
+                                        {{ $tag->name }}
+                                    </span>
+                                @endforeach
+                            </div>
+                        </div>
+                    @endif
+
                     <div class="post-content mb-5">
                         {!! $post->content !!}
                     </div>

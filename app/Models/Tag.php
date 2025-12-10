@@ -12,4 +12,12 @@ class Tag extends Model
     protected $fillable = [
         'name',
     ];
+
+    /**
+     * Get all of the posts for the tag.
+     */
+    public function posts()
+    {
+        return $this->belongsToMany(Post::class, 'post_tags');
+    }
 }

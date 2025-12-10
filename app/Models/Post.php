@@ -55,12 +55,17 @@ class Post extends Model
     /**
      * Get all of the comments for the post.
      */
-    /**
-     * Get all of the comments for the post.
-     */
     public function comments()
     {
         return $this->hasMany(Comment::class)->withTrashed();
+    }
+
+    /**
+     * Get all of the tags for the post.
+     */
+    public function tags()
+    {
+        return $this->belongsToMany(Tag::class, 'post_tags');
     }
 
     /**

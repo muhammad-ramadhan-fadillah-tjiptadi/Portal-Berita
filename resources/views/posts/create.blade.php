@@ -236,6 +236,19 @@
                                     @enderror
                                 </div>
 
+                                <div class="form-group">
+                                    <label for="tags" class="form-label">Tags <span class="text-muted small">(Pisahkan
+                                            dengan koma)</span></label>
+                                    <input type="text" class="form-control @error('tags') is-invalid @enderror"
+                                        id="tags" name="tags" value="{{ old('tags') }}">
+                                    @error('tags')
+                                        <span class="error-message">
+                                            <i class="fas fa-exclamation-triangle me-1"></i>
+                                            {{ $message }}
+                                        </span>
+                                    @enderror
+                                </div>
+
                                 <div class="d-flex justify-content-between align-items-center">
                                     <a href="{{ route('home') }}" class="btn-alert-secondary">
                                         <i class="fas fa-arrow-left me-1"></i> Kembali
