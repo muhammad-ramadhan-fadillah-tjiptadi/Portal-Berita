@@ -1,24 +1,46 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+
+        .btn-alert-secondary {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d3d6d8;
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-alert-secondary:hover {
+            background-color: #d1d3d6;
+            color: #383d41;
+        }
+    </style>
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
         @endif
 
         <div class="d-flex justify-content-between align-items-center mb-3">
-            <h3>Data Komentar</h3>
+            <h3>Tempat Sampah Komentar</h3>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.comments.export') }}" class="btn btn-alert-success">
-                    <i class="fas fa-file-excel me-1"></i> Export Excel
-                </a>
-                <a href="{{ route('admin.comments.trash') }}" class="btn btn-alert-warning">
-                    <i class="fas fa-trash me-1"></i> Tempat Sampah
-                </a>
-                <a href="{{ route('admin.comments.create') }}" class="btn btn-alert-primary">
-                    <i class="fas fa-plus me-1"></i> Tambah Komentar
+                <a href="{{ route('admin.comments.index') }}" class="btn btn-alert-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
+        </div>
+
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Komentar yang ada di tempat sampah telah dihapus secara sementara. Anda dapat mengembalikannya atau menghapusnya
+            secara permanen.
         </div>
 
         <table class="table table-bordered">
@@ -27,7 +49,7 @@
                 <th>Isi Komentar</th>
                 <th>Artikel</th>
                 <th>User</th>
-                <th>Tanggal</th>
+                <th>Dihapus pada</th>
                 <th>Aksi</th>
             </tr>
             @forelse($comments as $index => $comment)
@@ -57,23 +79,23 @@
                             <span class="text-muted">User dihapus</span>
                         @endif
                     </td>
-                    <td>{{ $comment->created_at->format('d-m-Y H:i') }}</td>
+                    <td>{{ $comment->deleted_at->format('d-m-Y H:i') }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('admin.comments.edit', $comment) }}" class="btn btn-sm btn-alert-primary me-2">
-                            <i class="fas fa-edit"></i> Edit
+                        <a href="{{ route('admin.comments.restore', $comment) }}" class="btn btn-sm btn-alert-success me-2">
+                            <i class="fas fa-undo"></i> Kembalikan
                         </a>
-                        <form action="{{ route('admin.comments.destroy', $comment) }}" method="POST" class="d-inline">
+                        <form action="{{ route('admin.comments.force-delete', $comment) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-alert-danger">
-                                <i class="fas fa-trash"></i> Hapus
+                                <i class="fas fa-trash"></i> Hapus Permanen
                             </button>
                         </form>
                     </td>
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">Tidak ada data komentar</td>
+                    <td colspan="6" class="text-center">Tidak ada data komentar di tempat sampah</td>
                 </tr>
             @endforelse
         </table>

@@ -121,13 +121,15 @@ Route::middleware('isAdmin')->group(function () {
             Route::get('/', [\App\Http\Controllers\CommentController::class, 'index'])->name('index');
             Route::get('/create', [\App\Http\Controllers\CommentController::class, 'create'])->name('create');
             Route::post('/', [\App\Http\Controllers\CommentController::class, 'adminStore'])->name('store');
-            Route::get('/{comment}/edit', [\App\Http\Controllers\CommentController::class, 'edit'])->name('edit');
-            Route::put('/{comment}', [\App\Http\Controllers\CommentController::class, 'update'])->name('update');
-            Route::delete('/{comment}', [\App\Http\Controllers\CommentController::class, 'destroy'])->name('destroy');
+            Route::get('/{comment}/edit', [\App\Http\Controllers\CommentController::class, 'adminEdit'])->name('edit');
+            Route::put('/{comment}', [\App\Http\Controllers\CommentController::class, 'adminUpdate'])->name('update');
+            Route::delete('/{comment}', [\App\Http\Controllers\CommentController::class, 'adminDestroy'])->name('destroy');
             // Manajemen Trash untuk Comments
             Route::get('/trash', [\App\Http\Controllers\CommentController::class, 'trash'])->name('trash');
             Route::patch('/{comment}/restore', [\App\Http\Controllers\CommentController::class, 'restore'])->name('restore');
             Route::delete('/{comment}/force-delete', [\App\Http\Controllers\CommentController::class, 'forceDelete'])->name('force-delete');
+            // Export Comments
+            Route::get('/export', [\App\Http\Controllers\CommentController::class, 'export'])->name('export');
         });
 
         // Manajemen Tags - CRUD lengkap dengan soft delete
@@ -142,6 +144,8 @@ Route::middleware('isAdmin')->group(function () {
             Route::get('/trash', [\App\Http\Controllers\TagController::class, 'trash'])->name('trash');
             Route::patch('/{tag}/restore', [\App\Http\Controllers\TagController::class, 'restore'])->name('restore');
             Route::delete('/{tag}/force-delete', [\App\Http\Controllers\TagController::class, 'forceDelete'])->name('force-delete');
+            // Export Tags
+            Route::get('/export', [\App\Http\Controllers\TagController::class, 'export'])->name('export');
         });
 
         // Manajemen Users - CRUD lengkap dengan soft delete

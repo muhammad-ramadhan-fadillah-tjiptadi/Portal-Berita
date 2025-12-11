@@ -97,6 +97,12 @@
             </div>
         @endif
 
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Kategori yang ada di tempat sampah telah dihapus secara sementara. Anda dapat mengembalikannya atau menghapusnya
+            secara permanen.
+        </div>
+
         <table class="table table-bordered">
             <thead>
                 <tr>

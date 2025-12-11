@@ -217,6 +217,6 @@ class SubCategorieController extends Controller
      */
     public function export()
     {
-        return Excel::download(new SubcategoriesExport, 'subcategories.xlsx');
+        return Excel::download(new SubcategoriesExport, 'subcategories_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }

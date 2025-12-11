@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Tag;
 use Illuminate\Http\Request;
+use Illuminate\Support\Str;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,9 +16,6 @@ use Illuminate\Http\Request;
 | - Relasi many-to-many dengan artikel
 | - Auto-creation saat user menambah tag baru
 | - Soft delete support
-|
-| Note: Saat ini tag di-create otomatis melalui PostController
-| Controller ini bisa dikembangkan untuk manajemen tag manual
 |
 */
 
@@ -39,8 +37,7 @@ class TagController extends Controller
      */
     public function create()
     {
-        // TODO: Implementasi form create tag
-        // View: admin.tags.create
+        return view('admin.tags.create');
     }
 
     /**
@@ -49,9 +46,17 @@ class TagController extends Controller
      */
     public function store(Request $request)
     {
-        // TODO: Implementasi store tag
-        // Validation: name required, unique
-        // Auto-slug: Str::slug($request->name)
+        $request->validate([
+            'name' => 'required|string|max:255|unique:tags,name',
+        ]);
+
+        Tag::create([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ]);
+
+        return redirect()->route('admin.tags.index')
+            ->with('success', 'Tag berhasil dibuat!');
     }
 
     /**
@@ -60,9 +65,8 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        // TODO: Implementasi show tag
-        // Load: $tag->with('posts')->findOrFail($tag->id)
-        // View: admin.tags.show
+        $tag->load('posts');
+        return view('admin.tags.show', compact('tag'));
     }
 
     /**
@@ -71,8 +75,7 @@ class TagController extends Controller
      */
     public function edit(Tag $tag)
     {
-        // TODO: Implementasi edit tag
-        // View: admin.tags.edit
+        return view('admin.tags.edit', compact('tag'));
     }
 
     /**
@@ -81,9 +84,17 @@ class TagController extends Controller
      */
     public function update(Request $request, Tag $tag)
     {
-        // TODO: Implementasi update tag
-        // Validation: name required, unique (except current)
-        // Update slug jika name berubah
+        $request->validate([
+            'name' => 'required|string|max:255|unique:tags,name,' . $tag->id,
+        ]);
+
+        $tag->update([
+            'name' => $request->name,
+            'slug' => Str::slug($request->name),
+        ]);
+
+        return redirect()->route('admin.tags.index')
+            ->with('success', 'Tag berhasil diperbarui!');
     }
 
     /**
@@ -92,8 +103,75 @@ class TagController extends Controller
      */
     public function destroy(Tag $tag)
     {
-        // TODO: Implementasi delete tag
-        // Soft delete: $tag->delete()
-        // Redirect: admin.tags.index
+        $tag->delete();
+        return redirect()->route('admin.tags.index')
+            ->with('success', 'Tag berhasil dihapus!');
+    }
+
+    /**
+     * Menampilkan tag yang dihapus (trash)
+     * Fitur: Lihat tag yang dihapus untuk restore
+     */
+    public function trash()
+    {
+        $tags = Tag::onlyTrashed()->withCount('posts')->latest('deleted_at')->paginate(20);
+        return view('admin.tags.trash', compact('tags'));
+    }
+
+    /**
+     * Mengembalikan tag yang dihapus
+     * Fitur: Restore tag dari trash
+     */
+    public function restore($id)
+    {
+        $tag = Tag::onlyTrashed()->findOrFail($id);
+        $tag->restore();
+
+        return redirect()->route('admin.tags.trash')
+            ->with('success', 'Tag berhasil dikembalikan!');
+    }
+
+    /**
+     * Menghapus tag permanen
+     * Fitur: Force delete tag dari database
+     */
+    public function forceDelete($id)
+    {
+        $tag = Tag::onlyTrashed()->findOrFail($id);
+        $tag->forceDelete();
+
+        return redirect()->route('admin.tags.trash')
+            ->with('success', 'Tag berhasil dihapus permanen!');
+    }
+
+    /**
+     * Export tag ke Excel
+     * Fitur: Download data tag dalam format Excel
+     */
+    public function export()
+    {
+        $tags = Tag::withCount('posts')->latest()->get();
+
+        $filename = "tags_" . date('Y-m-d_H-i-s') . ".csv";
+        $handle = fopen($filename, 'w+');
+
+        // Header CSV
+        fputcsv($handle, ['ID', 'Nama Tag', 'Slug', 'Jumlah Artikel', 'Dibuat', 'Diupdate']);
+
+        // Data CSV
+        foreach ($tags as $tag) {
+            fputcsv($handle, [
+                $tag->id,
+                $tag->name,
+                $tag->slug,
+                $tag->posts_count,
+                $tag->created_at->format('d-m-Y H:i'),
+                $tag->updated_at->format('d-m-Y H:i')
+            ]);
+        }
+
+        fclose($handle);
+
+        return response()->download($filename)->deleteFileAfterSend(true);
     }
 }

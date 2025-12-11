@@ -90,6 +90,12 @@
             </a>
         </div>
 
+        <div class="alert alert-warning">
+            <i class="fas fa-exclamation-triangle me-2"></i>
+            Sub kategori yang ada di tempat sampah telah dihapus secara sementara. Anda dapat mengembalikannya atau
+            menghapusnya secara permanen.
+        </div>
+
         <table class="table table-bordered">
             <tr>
                 <th>No</th>

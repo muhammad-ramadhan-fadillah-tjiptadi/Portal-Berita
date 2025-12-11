@@ -61,7 +61,7 @@ class CategorieController extends Controller
     {
         // Export data kategori menggunakan Laravel Excel
         // CategoriesExport class akan format data untuk Excel
-        return Excel::download(new CategoriesExport, 'categories.xlsx');
+        return Excel::download(new CategoriesExport, 'categories_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 
     /**

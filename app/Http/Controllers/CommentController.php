@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\Models\Comment;
 use App\Models\Post;
+use App\Exports\CommentsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -218,6 +220,47 @@ class CommentController extends Controller
     }
 
     /**
+     * Show form for editing comment (admin)
+     */
+    public function adminEdit($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $posts = Post::where('status', 'published')->get();
+        return view('admin.comments.edit', compact('comment', 'posts'));
+    }
+
+    /**
+     * Update comment (admin)
+     */
+    public function adminUpdate(Request $request, $id)
+    {
+        $comment = Comment::findOrFail($id);
+
+        $request->validate([
+            'content' => 'required|string|max:1000',
+            'post_id' => 'required|exists:posts,id',
+            'user_id' => 'required|exists:users,id',
+        ]);
+
+        $comment->update($request->all());
+
+        return redirect()->route('admin.comments.index')
+            ->with('success', 'Komentar berhasil diperbarui!');
+    }
+
+    /**
+     * Delete comment (admin)
+     */
+    public function adminDestroy($id)
+    {
+        $comment = Comment::findOrFail($id);
+        $comment->delete();
+
+        return redirect()->route('admin.comments.index')
+            ->with('success', 'Komentar berhasil dihapus!');
+    }
+
+    /**
      * Show trashed comments for admin
      */
     public function trash()
@@ -252,5 +295,13 @@ class CommentController extends Controller
 
         return redirect()->route('admin.comments.trash')
             ->with('success', 'Komentar berhasil dihapus permanen!');
+    }
+
+    /**
+     * Export comments to Excel using Yajra
+     */
+    public function export()
+    {
+        return Excel::download(new CommentsExport, 'comments_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }
