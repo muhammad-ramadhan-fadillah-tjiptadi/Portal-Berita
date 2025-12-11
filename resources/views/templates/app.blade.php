@@ -406,6 +406,12 @@
                                     </li>
                                 </ul>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('admin/posts*') ? 'active' : '' }}"
+                                    href="{{ route('admin.posts.index') }}">
+                                    <i class="fas fa-newspaper me-1"></i> Kelola Artikel
+                                </a>
+                            </li>
                             <!-- Admin Navigation - Menu Terpisah -->
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->is('admin/comments*') ? 'active' : '' }}"

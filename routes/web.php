@@ -88,6 +88,19 @@ Route::middleware('isAdmin')->group(function () {
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
         // Route untuk chart data posts
         Route::get('/posts/chart', [\App\Http\Controllers\PostController::class, 'chart'])->name('posts.chart');
+
+        // Manajemen Posts - CRUD lengkap untuk admin
+        Route::prefix('posts')->name('posts.')->group(function () {
+            Route::get('/', [\App\Http\Controllers\PostController::class, 'adminIndex'])->name('index');
+            Route::get('/create', [\App\Http\Controllers\PostController::class, 'create'])->name('create');
+            Route::post('/', [\App\Http\Controllers\PostController::class, 'store'])->name('store');
+            Route::get('/{post}/edit', [\App\Http\Controllers\PostController::class, 'edit'])->name('edit');
+            Route::put('/{post}', [\App\Http\Controllers\PostController::class, 'update'])->name('update');
+            Route::delete('/{post}', [\App\Http\Controllers\PostController::class, 'destroy'])->name('destroy');
+            Route::get('/trash', [\App\Http\Controllers\PostController::class, 'trash'])->name('trash');
+            Route::post('/trash/{post}/restore', [\App\Http\Controllers\PostController::class, 'restore'])->name('restore');
+            Route::delete('/trash/{post}/force-delete', [\App\Http\Controllers\PostController::class, 'forceDelete'])->name('force-delete');
+        });
         // Manajemen Kategori - CRUD lengkap dengan soft delete
         Route::prefix('categories')->name('categories.')->group(function () {
             Route::get('/', [\App\Http\Controllers\CategorieController::class, 'index'])->name('index');

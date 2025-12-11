@@ -148,10 +148,10 @@
                     </div>
 
                     <div class="d-flex justify-content-between align-items-center">
-                        <a href="{{ route('admin.tags.index') }}" class="btn btn-secondary">
+                        <a href="{{ route('admin.tags.index') }}" class="btn btn-alert-secondary">
                             <i class="fas fa-arrow-left me-2"></i> Kembali
                         </a>
-                        <button type="submit" class="btn btn-primary">
+                        <button type="submit" class="btn btn-alert-primary">
                             <i class="fas fa-save me-2"></i> Simpan Tag
                         </button>
                     </div>

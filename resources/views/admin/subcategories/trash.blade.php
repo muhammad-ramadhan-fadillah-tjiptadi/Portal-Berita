@@ -136,7 +136,12 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">Tidak ada data di tempat sampah</td>
+                    <td colspan="6" class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Tempat sampah sub kategori kosong</p>
+                        <a href="{{ route('admin.subcategories.index') }}" class="btn btn-alert-primary">Kembali ke Daftar
+                            Sub Kategori</a>
+                    </td>
                 </tr>
             @endforelse
         </table>

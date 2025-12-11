@@ -44,41 +44,48 @@
         </div>
 
         <table class="table table-bordered">
-            <tr>
-                <th>No</th>
-                <th>Nama Tag</th>
-                <th>Jumlah Artikel Yang Memakai Tag</th>
-                <th>Dihapus pada</th>
-                <th>Aksi</th>
-            </tr>
-            @forelse($tags as $index => $tag)
+            <thead>
                 <tr>
-                    <td>{{ $index + 1 }}</td>
-                    <td>{{ $tag->name }}</td>
-                    <td>{{ $tag->posts_count ?? 0 }}</td>
-                    <td>{{ $tag->deleted_at->format('d-m-Y H:i') }}</td>
-                    <td class="d-flex">
-                        <form action="{{ route('admin.tags.restore', $tag->id) }}" method="POST" class="d-inline me-2">
-                            @csrf
-                            @method('PATCH')
-                            <button type="submit" class="btn btn-sm btn-alert-success">
-                                <i class="fas fa-undo"></i> Pulihkan
-                            </button>
-                        </form>
-                        <form action="{{ route('admin.tags.force-delete', $tag->id) }}" method="POST" class="d-inline">
-                            @csrf
-                            @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-alert-danger">
-                                <i class="fas fa-trash"></i> Hapus Permanen
-                            </button>
-                        </form>
-                    </td>
+                    <th>No</th>
+                    <th>Nama Tag</th>
+                    <th>Dihapus pada</th>
+                    <th>Aksi</th>
                 </tr>
-            @empty
-                <tr>
-                    <td colspan="5" class="text-center">Tidak ada data tag di tempat sampah</td>
-                </tr>
-            @endforelse
+            </thead>
+            <tbody>
+                @forelse($tags as $index => $tag)
+                    <tr>
+                        <td>{{ $index + 1 }}</td>
+                        <td>{{ $tag->name }}</td>
+                        <td>{{ $tag->deleted_at->format('d-m-Y H:i') }}</td>
+                        <td class="d-flex">
+                            <form action="{{ route('admin.tags.restore', $tag->id) }}" method="POST" class="d-inline me-2">
+                                @csrf
+                                @method('PATCH')
+                                <button type="submit" class="btn btn-sm btn-alert-success">
+                                    <i class="fas fa-undo"></i> Pulihkan
+                                </button>
+                            </form>
+                            <form action="{{ route('admin.tags.force-delete', $tag->id) }}" method="POST" class="d-inline">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-alert-danger">
+                                    <i class="fas fa-trash"></i> Hapus Permanen
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="4" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Tempat sampah tag kosong</p>
+                            <a href="{{ route('admin.tags.index') }}" class="btn btn-alert-primary">Kembali ke Daftar
+                                Tag</a>
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
         </table>
     </div>
 @endsection

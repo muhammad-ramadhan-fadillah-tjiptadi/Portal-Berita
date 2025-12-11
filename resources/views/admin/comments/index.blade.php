@@ -1,6 +1,12 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+    </style>
+
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>

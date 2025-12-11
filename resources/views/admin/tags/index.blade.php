@@ -30,7 +30,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Tag</th>
-                <th>Jumlah Artikel Yang Memakai Tag</th>
+                <th>Jumlah Tag Yang Dipakai Dalam Artikel</th>
                 <th>Aksi</th>
             </tr>
             @forelse($tags as $index => $tag)

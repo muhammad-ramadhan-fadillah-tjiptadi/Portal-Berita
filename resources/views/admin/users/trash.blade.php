@@ -102,7 +102,11 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="7" class="text-center">Tidak ada data user di tempat sampah</td>
+                    <td colspan="7" class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Tempat sampah user kosong</p>
+                        <a href="{{ route('admin.users.index') }}" class="btn btn-alert-primary">Kembali ke Daftar User</a>
+                    </td>
                 </tr>
             @endforelse
         </table>

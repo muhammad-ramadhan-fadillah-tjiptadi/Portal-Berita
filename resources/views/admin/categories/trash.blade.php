@@ -144,7 +144,12 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">Tidak ada data di tempat sampah</td>
+                        <td colspan="5" class="text-center py-4">
+                            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                            <p class="text-muted">Tempat sampah kategori kosong</p>
+                            <a href="{{ route('admin.categories.index') }}" class="btn btn-alert-primary">Kembali ke Daftar
+                                Kategori</a>
+                        </td>
                     </tr>
                 @endforelse
             </tbody>

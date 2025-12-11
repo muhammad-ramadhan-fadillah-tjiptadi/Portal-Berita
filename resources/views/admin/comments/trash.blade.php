@@ -99,7 +99,12 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="6" class="text-center">Tidak ada data komentar di tempat sampah</td>
+                    <td colspan="6" class="text-center py-4">
+                        <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+                        <p class="text-muted">Tempat sampah komentar kosong</p>
+                        <a href="{{ route('admin.comments.index') }}" class="btn btn-alert-primary">Kembali ke Daftar
+                            Komentar</a>
+                    </td>
                 </tr>
             @endforelse
         </table>

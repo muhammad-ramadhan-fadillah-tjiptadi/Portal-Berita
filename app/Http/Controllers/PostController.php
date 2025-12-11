@@ -638,4 +638,61 @@ class PostController extends Controller
             'draft' => $draftPosts
         ]);
     }
+
+    /**
+     * Display all posts for admin management
+     */
+    public function adminIndex()
+    {
+        $posts = Post::with(['user', 'category'])
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.posts.index', compact('posts'));
+    }
+
+    /**
+     * Display trashed posts
+     */
+    public function trash()
+    {
+        $posts = Post::onlyTrashed()
+            ->with(['user', 'category'])
+            ->latest()
+            ->paginate(10);
+
+        return view('admin.posts.trash', compact('posts'));
+    }
+
+    /**
+     * Restore a trashed post
+     */
+    public function restore($id)
+    {
+        $post = Post::withTrashed()->find($id);
+        if (!$post) {
+            return redirect()->route('admin.posts.trash')
+                ->with('error', 'Artikel tidak ditemukan!');
+        }
+
+        $post->restore();
+        return redirect()->route('admin.posts.trash')
+            ->with('success', 'Artikel berhasil dipulihkan!');
+    }
+
+    /**
+     * Force delete a post permanently
+     */
+    public function forceDelete($id)
+    {
+        $post = Post::withTrashed()->find($id);
+        if (!$post) {
+            return redirect()->route('admin.posts.trash')
+                ->with('error', 'Artikel tidak ditemukan!');
+        }
+
+        $post->forceDelete();
+        return redirect()->route('admin.posts.trash')
+            ->with('success', 'Artikel berhasil dihapus permanen!');
+    }
 }
