@@ -151,6 +151,7 @@ Route::middleware('isAdmin')->group(function () {
         // Manajemen Users - CRUD lengkap dengan soft delete
         Route::prefix('users')->name('users.')->group(function () {
             Route::get('/', [\App\Http\Controllers\UserController::class, 'index'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\UserController::class, 'export'])->name('export');
             Route::get('/create', [\App\Http\Controllers\UserController::class, 'create'])->name('create');
             Route::post('/', [\App\Http\Controllers\UserController::class, 'store'])->name('store');
             Route::get('/{user}/edit', [\App\Http\Controllers\UserController::class, 'edit'])->name('edit');

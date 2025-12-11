@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -165,7 +166,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::latest()->paginate();
+        $users = User::latest()->withCount('posts')->paginate();
         return view('admin.users.index', compact('users'));
     }
 
@@ -185,7 +186,7 @@ class UserController extends Controller
         $request->validate([
             'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users,email',
-            'password' => 'required|min:8',
+            'password' => 'required|min:8|confirmed',
             'role' => 'required|in:admin,user',
         ]);
 
@@ -239,6 +240,15 @@ class UserController extends Controller
     }
 
     /**
+     * Export users ke Excel
+     * Fitur: Download data users dalam format Excel menggunakan Yajra
+     */
+    public function export()
+    {
+        return Excel::download(new \App\Exports\UsersExport(), 'users_' . date('Y-m-d_H-i-s') . '.xlsx');
+    }
+
+    /**
      * Soft delete user
      */
     public function destroy($id)
@@ -260,7 +270,7 @@ class UserController extends Controller
      */
     public function trash()
     {
-        $users = User::onlyTrashed()->latest('deleted_at')->paginate(20);
+        $users = User::onlyTrashed()->latest('deleted_at')->withCount('posts')->paginate(20);
         return view('admin.users.trash', compact('users'));
     }
 

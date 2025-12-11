@@ -5,6 +5,23 @@
         .btn i {
             margin-right: 6px !important;
         }
+
+        .btn-alert-secondary {
+            background-color: #e2e3e5;
+            color: #383d41;
+            border: 1px solid #d3d6d8;
+            text-decoration: none;
+            padding: 0.375rem 0.75rem;
+            display: inline-flex;
+            align-items: center;
+            border-radius: 0.25rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-alert-secondary:hover {
+            background-color: #d1d3d6;
+            color: #383d41;
+        }
     </style>
     <div class="container mt-5">
         @if (session('success'))
@@ -14,8 +31,8 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Tempat Sampah Tag</h3>
             <div class="d-flex gap-2">
-                <a href="{{ route('admin.tags.index') }}" class="btn btn-alert-primary">
-                    <i class="fas fa-arrow-left me-1"></i> Kembali ke Data Tag
+                <a href="{{ route('admin.tags.index') }}" class="btn btn-alert-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Kembali
                 </a>
             </div>
         </div>

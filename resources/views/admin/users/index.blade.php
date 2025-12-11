@@ -1,6 +1,29 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+
+        .badge-admin {
+            background-color: #f8d7da;
+            color: #842029;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .badge-user {
+            background-color: #cfe2ff;
+            color: #084298;
+            padding: 0.25rem 0.5rem;
+            border-radius: 0.375rem;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+    </style>
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -13,6 +36,9 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Data User</h3>
             <div class="d-flex gap-2">
+                <a href="{{ route('admin.users.export') }}" class="btn btn-alert-success">
+                    <i class="fas fa-file-excel me-1"></i> Export Excel
+                </a>
                 <a href="{{ route('admin.users.trash') }}" class="btn btn-alert-warning">
                     <i class="fas fa-trash me-1"></i> Tempat Sampah
                 </a>
@@ -38,7 +64,7 @@
                     <td>{{ $user->name }}</td>
                     <td>{{ $user->email }}</td>
                     <td>
-                        <span class="badge bg-{{ $user->role === 'admin' ? 'danger' : 'primary' }}">
+                        <span class="badge {{ $user->role === 'admin' ? 'badge-admin' : 'badge-user' }}">
                             {{ $user->role === 'admin' ? 'Admin' : 'User' }}
                         </span>
                     </td>
