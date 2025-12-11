@@ -85,7 +85,7 @@
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="btn btn-sm btn-alert-success">
-                                <i class="fas fa-undo"></i> Kembalikan
+                                <i class="fas fa-undo"></i> Pulihkan
                             </button>
                         </form>
                         <form action="{{ route('admin.comments.force-delete', $comment) }}" method="POST" class="d-inline">

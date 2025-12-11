@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -56,7 +57,7 @@ class TagController extends Controller
         ]);
 
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag berhasil dibuat!');
+            ->with('success', 'Tag berhasil dibuat !');
     }
 
     /**
@@ -94,7 +95,7 @@ class TagController extends Controller
         ]);
 
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag berhasil diperbarui!');
+            ->with('success', 'Tag berhasil diperbarui !');
     }
 
     /**
@@ -105,7 +106,7 @@ class TagController extends Controller
     {
         $tag->delete();
         return redirect()->route('admin.tags.index')
-            ->with('success', 'Tag berhasil dihapus!');
+            ->with('success', 'Tag berhasil dihapus !');
     }
 
     /**
@@ -128,7 +129,7 @@ class TagController extends Controller
         $tag->restore();
 
         return redirect()->route('admin.tags.trash')
-            ->with('success', 'Tag berhasil dikembalikan!');
+            ->with('success', 'Tag berhasil dipulihkan !');
     }
 
     /**
@@ -141,37 +142,15 @@ class TagController extends Controller
         $tag->forceDelete();
 
         return redirect()->route('admin.tags.trash')
-            ->with('success', 'Tag berhasil dihapus permanen!');
+            ->with('success', 'Tag berhasil dihapus permanen !');
     }
 
     /**
      * Export tag ke Excel
-     * Fitur: Download data tag dalam format Excel
+     * Fitur: Download data tag dalam format Excel menggunakan Yajra
      */
     public function export()
     {
-        $tags = Tag::withCount('posts')->latest()->get();
-
-        $filename = "tags_" . date('Y-m-d_H-i-s') . ".csv";
-        $handle = fopen($filename, 'w+');
-
-        // Header CSV
-        fputcsv($handle, ['ID', 'Nama Tag', 'Slug', 'Jumlah Artikel', 'Dibuat', 'Diupdate']);
-
-        // Data CSV
-        foreach ($tags as $tag) {
-            fputcsv($handle, [
-                $tag->id,
-                $tag->name,
-                $tag->slug,
-                $tag->posts_count,
-                $tag->created_at->format('d-m-Y H:i'),
-                $tag->updated_at->format('d-m-Y H:i')
-            ]);
-        }
-
-        fclose($handle);
-
-        return response()->download($filename)->deleteFileAfterSend(true);
+        return Excel::download(new \App\Exports\TagsExport(), 'tags_' . date('Y-m-d_H-i-s') . '.xlsx');
     }
 }

@@ -1,6 +1,11 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+    </style>
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -25,15 +30,13 @@
             <tr>
                 <th>No</th>
                 <th>Nama Tag</th>
-                <th>Slug</th>
-                <th>Jumlah Artikel</th>
+                <th>Jumlah Artikel Yang Memakai Tag</th>
                 <th>Aksi</th>
             </tr>
             @forelse($tags as $index => $tag)
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $tag->name }}</td>
-                    <td>{{ $tag->slug }}</td>
                     <td>{{ $tag->posts_count ?? 0 }}</td>
                     <td class="d-flex">
                         <a href="{{ route('admin.tags.edit', ['tag' => $tag->id]) }}"

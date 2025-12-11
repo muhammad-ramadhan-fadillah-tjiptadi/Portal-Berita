@@ -177,7 +177,7 @@ class CategorieController extends Controller
         $category = Categorie::onlyTrashed()->findOrFail($id);
         $category->restore();
         return redirect()->route('admin.categories.trash')
-            ->with('success', 'Kategori berhasil dikembalikan !');
+            ->with('success', 'Kategori berhasil pulihkan !');
     }
 
     /**

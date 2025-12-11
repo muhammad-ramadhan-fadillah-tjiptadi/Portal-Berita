@@ -1,6 +1,11 @@
 @extends('templates.app')
 
 @section('content')
+    <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+    </style>
     <div class="container mt-5">
         @if (session('success'))
             <div class="alert alert-success">{{ session('success') }}</div>
@@ -25,7 +30,7 @@
             <tr>
                 <th>No</th>
                 <th>Nama Tag</th>
-                <th>Slug</th>
+                <th>Jumlah Artikel Yang Memakai Tag</th>
                 <th>Dihapus pada</th>
                 <th>Aksi</th>
             </tr>
@@ -33,18 +38,20 @@
                 <tr>
                     <td>{{ $index + 1 }}</td>
                     <td>{{ $tag->name }}</td>
-                    <td>{{ $tag->slug }}</td>
+                    <td>{{ $tag->posts_count ?? 0 }}</td>
                     <td>{{ $tag->deleted_at->format('d-m-Y H:i') }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('admin.tags.restore', $tag->id) }}" class="btn btn-sm btn-alert-success me-2"
-                            onclick="return confirm('Apakah Anda yakin ingin mengembalikan tag ini?')">
-                            <i class="fas fa-undo"></i> Kembalikan
-                        </a>
+                        <form action="{{ route('admin.tags.restore', $tag->id) }}" method="POST" class="d-inline me-2">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-sm btn-alert-success">
+                                <i class="fas fa-undo"></i> Pulihkan
+                            </button>
+                        </form>
                         <form action="{{ route('admin.tags.force-delete', $tag->id) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-alert-danger"
-                                onclick="return confirm('Apakah Anda yakin ingin menghapus tag ini secara permanen?')">
+                            <button type="submit" class="btn btn-sm btn-alert-danger">
                                 <i class="fas fa-trash"></i> Hapus Permanen
                             </button>
                         </form>

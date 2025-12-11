@@ -2,6 +2,10 @@
 
 @section('content')
     <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+
         .btn-alert-success {
             background-color: #d1e7dd;
             color: #0f5132;

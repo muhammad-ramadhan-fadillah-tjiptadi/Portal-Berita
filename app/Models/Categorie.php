@@ -43,6 +43,12 @@ class Categorie extends Model
         static::updating(function ($category) {
             $category->slug = Str::slug($category->name);
         });
+
+        // Cascade delete subcategories when category is deleted
+        static::deleting(function ($category) {
+            // Delete all related subcategories
+            $category->subCategories()->delete();
+        });
     }
 
     /**

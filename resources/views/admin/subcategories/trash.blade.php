@@ -2,6 +2,10 @@
 
 @section('content')
     <style>
+        .btn i {
+            margin-right: 6px !important;
+        }
+
         .btn-alert-success {
             background-color: #d1e7dd;
             color: #0f5132;
@@ -118,14 +122,14 @@
                             @csrf
                             @method('PATCH')
                             <button type="submit" class="btn btn-sm btn-alert-success">
-                                <i class="fas fa-undo"></i> Pulihkan
+                                <i class="fas fa-undo"></i> Kembalikan
                             </button>
                         </form>
                         <form action="{{ route('admin.subcategories.force-delete', $subcategory->id) }}" method="POST">
                             @csrf
                             @method('DELETE')
                             <button type="submit" class="btn btn-sm btn-alert-danger">
-                                <i class="fas fa-trash"></i> Hapus Permanen
+                                <i class="fas fa-trash"></i>Hapus Permanen
                             </button>
                         </form>
                     </td>

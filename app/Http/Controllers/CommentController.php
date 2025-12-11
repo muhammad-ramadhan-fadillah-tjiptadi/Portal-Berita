@@ -282,7 +282,7 @@ class CommentController extends Controller
         $comment->restore();
 
         return redirect()->route('admin.comments.trash')
-            ->with('success', 'Komentar berhasil dikembalikan !');
+            ->with('success', 'Komentar berhasil dipulihkan !');
     }
 
     /**
