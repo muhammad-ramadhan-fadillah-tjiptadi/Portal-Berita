@@ -623,4 +623,19 @@ class PostController extends Controller
         return redirect()->route('user.posts.my-articles')
             ->with('success', 'Artikel berhasil dipublikasikan !');
     }
+
+    public function chart()
+    {
+        // Data sederhana: total posts, published, draft
+        $totalPosts = Post::count();
+        $publishedPosts = Post::where('status', 'published')->count();
+        $draftPosts = Post::where('status', 'draft')->count();
+
+        // Return data untuk chart
+        return response()->json([
+            'total' => $totalPosts,
+            'published' => $publishedPosts,
+            'draft' => $draftPosts
+        ]);
+    }
 }

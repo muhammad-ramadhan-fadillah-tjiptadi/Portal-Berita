@@ -86,6 +86,8 @@ Route::middleware('isAdmin')->group(function () {
     Route::prefix('admin')->name('admin.')->group(function () {
         // Dashboard Admin - Menampilkan statistik sistem
         Route::get('/dashboard', [\App\Http\Controllers\Admin\DashboardController::class, 'index'])->name('dashboard');
+        // Route untuk chart data posts
+        Route::get('/posts/chart', [\App\Http\Controllers\PostController::class, 'chart'])->name('posts.chart');
         // Manajemen Kategori - CRUD lengkap dengan soft delete
         Route::prefix('categories')->name('categories.')->group(function () {
             Route::get('/', [\App\Http\Controllers\CategorieController::class, 'index'])->name('index');
