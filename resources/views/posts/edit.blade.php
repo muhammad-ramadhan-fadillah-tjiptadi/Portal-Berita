@@ -135,6 +135,10 @@
                                         <button type="submit" name="publish" value="1" class="btn-alert-success">
                                             <i class="fas fa-upload me-1"></i> Publikasikan
                                         </button>
+                                    @else
+                                        <button type="submit" name="publish" value="0" class="btn-alert-success">
+                                            <i class="fas fa-file-alt me-1"></i> Simpan sebagai Draft
+                                        </button>
                                     @endif
                                 </div>
                             </div>

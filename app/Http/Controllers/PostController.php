@@ -417,6 +417,18 @@ class PostController extends Controller
         // Slug akan di-update otomatis jika title berubah (via model event)
         $post->update($validated);
 
+        // HANDLE STATUS UPDATE (Fitur Toggle Publish/Draft)
+        // Cek apakah user menekan tombol publish/draft
+        if ($request->has('publish')) {
+            $newStatus = $request->input('publish') == '1' ? 'published' : 'draft';
+
+            // Update status dan published_at
+            $post->update([
+                'status' => $newStatus,
+                'published_at' => $newStatus === 'published' ? now() : null,
+            ]);
+        }
+
         // HANDLE TAGS UPDATE (Fitur Update Tags)
         if ($request->has('tags')) {
             // Jika user mengisi tags, proses sama seperti di store()
@@ -447,7 +459,9 @@ class PostController extends Controller
 
         // REDIRECT BERDASARKAN STATUS ARTIKEL
         // Sama seperti store: published -> my-articles, draft -> drafts
-        $redirectRoute = $post->status === 'published' ? 'user.posts.my-articles' : 'user.posts.drafts';
+        // Gunakan status terbaru setelah update
+        $currentStatus = $post->fresh()->status;
+        $redirectRoute = $currentStatus === 'published' ? 'user.posts.my-articles' : 'user.posts.drafts';
 
         return redirect()->route($redirectRoute)
             ->with('success', 'Artikel berhasil diperbarui !');
