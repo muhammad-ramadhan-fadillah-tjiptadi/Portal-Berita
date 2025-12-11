@@ -216,7 +216,7 @@ class CommentController extends Controller
         Comment::create($request->all());
 
         return redirect()->route('admin.comments.index')
-            ->with('success', 'Komentar berhasil dibuat!');
+            ->with('success', 'Komentar berhasil dibuat !');
     }
 
     /**
@@ -245,7 +245,7 @@ class CommentController extends Controller
         $comment->update($request->all());
 
         return redirect()->route('admin.comments.index')
-            ->with('success', 'Komentar berhasil diperbarui!');
+            ->with('success', 'Komentar berhasil diperbarui !');
     }
 
     /**
@@ -257,7 +257,7 @@ class CommentController extends Controller
         $comment->delete();
 
         return redirect()->route('admin.comments.index')
-            ->with('success', 'Komentar berhasil dihapus!');
+            ->with('success', 'Komentar berhasil dihapus !');
     }
 
     /**
@@ -282,7 +282,7 @@ class CommentController extends Controller
         $comment->restore();
 
         return redirect()->route('admin.comments.trash')
-            ->with('success', 'Komentar berhasil dikembalikan!');
+            ->with('success', 'Komentar berhasil dikembalikan !');
     }
 
     /**
@@ -294,7 +294,7 @@ class CommentController extends Controller
         $comment->forceDelete();
 
         return redirect()->route('admin.comments.trash')
-            ->with('success', 'Komentar berhasil dihapus permanen!');
+            ->with('success', 'Komentar berhasil dihapus permanen !');
     }
 
     /**

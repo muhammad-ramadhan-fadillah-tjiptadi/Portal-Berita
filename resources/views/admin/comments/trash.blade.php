@@ -81,9 +81,13 @@
                     </td>
                     <td>{{ $comment->deleted_at->format('d-m-Y H:i') }}</td>
                     <td class="d-flex">
-                        <a href="{{ route('admin.comments.restore', $comment) }}" class="btn btn-sm btn-alert-success me-2">
-                            <i class="fas fa-undo"></i> Kembalikan
-                        </a>
+                        <form action="{{ route('admin.comments.restore', $comment) }}" method="POST" class="d-inline me-2">
+                            @csrf
+                            @method('PATCH')
+                            <button type="submit" class="btn btn-sm btn-alert-success">
+                                <i class="fas fa-undo"></i> Kembalikan
+                            </button>
+                        </form>
                         <form action="{{ route('admin.comments.force-delete', $comment) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
