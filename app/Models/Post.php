@@ -6,21 +6,41 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use App\Models\User;
 
+/*
+|--------------------------------------------------------------------------
+| POST MODEL - MODEL ARTIKEL
+|--------------------------------------------------------------------------
+|
+| Model ini merepresentasikan artikel/berita dalam sistem:
+| - Hubungan dengan user (penulis)
+| - Hubungan dengan kategori dan subkategori
+| - Hubungan dengan komentar
+| - Hubungan dengan tag
+| - Soft delete support
+|
+*/
+
 class Post extends Model
 {
     use SoftDeletes;
 
+    /**
+     * Kolom yang bisa diisi secara massal
+     */
     protected $fillable = [
-        'user_id',
-        'category_id',
-        'subcategory_id',
-        'title',
-        'slug',
-        'content',
-        'image',
-        'status',
+        'user_id',        // ID penulis artikel
+        'category_id',    // ID kategori artikel
+        'subcategory_id', // ID subkategori artikel
+        'title',          // Judul artikel
+        'slug',           // Slug untuk URL friendly
+        'content',        // Isi konten artikel
+        'image',          // Gambar utama artikel
+        'status',         // Status (draft/published)
     ];
 
+    /**
+     * Casting tipe data untuk kolom tertentu
+     */
     protected $casts = [
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
@@ -29,7 +49,8 @@ class Post extends Model
     ];
 
     /**
-     * Get the category that owns the post.
+     * Mendapatkan kategori dari artikel
+     * Relasi: Artikel milik satu kategori
      */
     public function category()
     {
@@ -37,7 +58,8 @@ class Post extends Model
     }
 
     /**
-     * Get the user that owns the post.
+     * Mendapatkan user/penulis artikel
+     * Relasi: Artikel ditulis oleh satu user
      */
     public function user()
     {
@@ -45,7 +67,8 @@ class Post extends Model
     }
 
     /**
-     * Get the subcategory that owns the post.
+     * Mendapatkan subkategori dari artikel
+     * Relasi: Artikel milik satu subkategori (opsional)
      */
     public function subCategory()
     {
@@ -53,7 +76,8 @@ class Post extends Model
     }
 
     /**
-     * Get all of the comments for the post.
+     * Mendapatkan semua komentar dari artikel
+     * Relasi: Artikel memiliki banyak komentar
      */
     public function comments()
     {
@@ -61,7 +85,8 @@ class Post extends Model
     }
 
     /**
-     * Get all of the tags for the post.
+     * Mendapatkan semua tag dari artikel
+     * Relasi: Artikel memiliki banyak tag (Many-to-Many)
      */
     public function tags()
     {
@@ -69,26 +94,27 @@ class Post extends Model
     }
 
     /**
-     * The "booting" method of the model.
-     *
-     * @return void
+     * Boot method untuk mengatur event model
+     * - Handle soft delete untuk komentar saat artikel dihapus
      */
     protected static function boot()
     {
         parent::boot();
 
+        // Saat artikel dihapus
         static::deleting(function ($post) {
             if ($post->isForceDeleting()) {
-                // If force deleting, also force delete all comments
+                // Jika force delete, hapus permanen semua komentar
                 $post->comments()->forceDelete();
             } else {
-                // If soft deleting, soft delete all comments
+                // Jika soft delete, soft delete semua komentar
                 $post->comments()->delete();
             }
         });
 
+        // Saat artikel di-restore
         static::restoring(function ($post) {
-            // When restoring a post, also restore its comments
+            // Restore juga semua komentar yang terhapus
             $post->comments()->onlyTrashed()->restore();
         });
     }

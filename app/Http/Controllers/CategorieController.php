@@ -9,48 +9,74 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 
+/*
+|--------------------------------------------------------------------------
+| CATEGORIE CONTROLLER - MANAJEMEN KATEGORI ARTIKEL
+|--------------------------------------------------------------------------
+|
+| Controller ini mengatur semua operasi terkait kategori artikel:
+| - CRUD kategori (Create, Read, Update, Delete)
+| - Export data kategori ke Excel
+| - Soft delete support
+| - Count posts per kategori
+|
+*/
+
 class CategorieController extends Controller
 {
     /**
-     * Display a listing of the categories.
+     * Menampilkan daftar semua kategori di dashboard admin
+     * Fitur: Manajemen kategori dengan statistik jumlah artikel
      */
     public function index()
     {
+        // Query semua kategori dengan count artikel:
+        // 1. withCount('posts') akan menambahkan field 'posts_count'
+        //    berisi jumlah artikel untuk setiap kategori
+        // 2. latest() urutkan berdasarkan created_at terbaru
+        // 3. get() execute query
         $categories = Categorie::withCount('posts')
             ->latest()
             ->get();
 
+        // Kirim data ke view admin.categories.index.blade.php
         return view('admin.categories.index', compact('categories'));
     }
 
     /**
-     * Create a new controller instance.
-     */
-    /**
-     * Show the form for creating a new category.
+     * Menampilkan form untuk membuat kategori baru
+     * Fitur: Tambah kategori baru untuk organisasi artikel
      */
     public function create()
     {
+        // Tampilkan form create kategori
         return view('admin.categories.create');
     }
 
     /**
-     * Export categories to Excel
+     * Export data kategori ke file Excel
+     * Fitur: Backup dan analisis data kategori
      */
     public function export()
     {
+        // Export data kategori menggunakan Laravel Excel
+        // CategoriesExport class akan format data untuk Excel
         return Excel::download(new CategoriesExport, 'categories.xlsx');
     }
 
     /**
-     * Store a newly created category in storage.
+     * Menyimpan kategori baru ke database
+     * Fitur: Create kategori dengan validasi dan auto-slug
      */
     public function store(Request $request)
     {
+        // VALIDASI INPUT KATEGORI
+        // Laravel Validation memastikan data kategori valid
         $validated = $request->validate([
-            'name' => 'required|string|max:255|unique:categories,name',
-            'description' => 'nullable|string',
+            'name' => 'required|string|max:255|unique:categories,name',    // Nama wajib, max 255, unik
+            'description' => 'nullable|string',                              // Deskripsi opsional
         ], [
+            // Custom error messages dalam bahasa Indonesia
             'name.required' => 'Nama kategori wajib diisi',
             'name.string' => 'Nama kategori harus berupa teks',
             'name.max' => 'Nama kategori maksimal 255 karakter',
@@ -58,22 +84,31 @@ class CategorieController extends Controller
             'description.string' => 'Deskripsi harus berupa teks',
         ]);
 
-        // Auto-generate slug dari nama kategori
+        // AUTO-GENERATE SLUG
+        // Str::slug() akan mengubah nama kategori menjadi URL-friendly:
+        // "Berita Teknologi" -> "berita-teknologi"
         $validated['slug'] = Str::slug($validated['name']);
-        $validated['description'] = $request->description ?? ''; // Ensure description is not null
 
+        // ENSURE DESCRIPTION NOT NULL
+        // Jika description kosong, set ke empty string
+        $validated['description'] = $request->description ?? '';
+
+        // SIMPAN KATEGORI KE DATABASE
+        // Categorie::create() akan mass assignment dengan validated data
         Categorie::create($validated);
 
+        // REDIRECT KE LIST KATEGORI
         return redirect()->route('admin.categories.index')
             ->with('success', 'Kategori berhasil ditambahkan !');
     }
 
     /**
-     * Display the specified category.
+     * Menampilkan detail kategori (tidak digunakan)
+     * Note: Method ini tidak digunakan di admin panel
      */
     public function show(Categorie $categorie)
     {
-        // Not used in admin panel
+        // Return 404 karena fitur tidak diimplementasikan
         abort(404);
     }
 

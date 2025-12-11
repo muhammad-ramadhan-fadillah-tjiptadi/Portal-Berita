@@ -379,17 +379,45 @@
                                     <i class="fas fa-tachometer-alt me-1"></i> Dashboard
                                 </a>
                             </li>
-                            <!-- Admin Navigation -->
+                            <!-- Admin Navigation - Kategori Dropdown -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle {{ request()->is('admin/categories*') || request()->is('admin/subcategories*') ? 'active' : '' }}"
+                                    href="#" id="kategoriDropdown" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    <i class="fas fa-database me-1"></i> Data Master
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="kategoriDropdown">
+                                    <li>
+                                        <a class="dropdown-item {{ request()->is('admin/categories*') ? 'active' : '' }}"
+                                            href="{{ route('admin.categories.index') }}">
+                                            <i class="fas fa-layer-group me-2"></i> Kelola Kategori
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="dropdown-item {{ request()->is('admin/subcategories*') ? 'active' : '' }}"
+                                            href="{{ route('admin.subcategories.index') }}">
+                                            <i class="fas fa-sitemap me-2"></i> Kelola Sub Kategori
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Admin Navigation - Menu Terpisah -->
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}"
-                                    href="{{ route('admin.categories.index') }}">
-                                    <i class="fas fa-layer-group me-1"></i> Kelola Kategori
+                                <a class="nav-link {{ request()->is('admin/comments*') ? 'active' : '' }}"
+                                    href="{{ route('admin.comments.index') }}">
+                                    <i class="fas fa-comments me-1"></i> Kelola Comment
                                 </a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link {{ request()->is('admin/subcategories*') ? 'active' : '' }}"
-                                    href="{{ route('admin.subcategories.index') }}">
-                                    <i class="fas fa-sitemap me-1"></i> Kelola Sub Kategori
+                                <a class="nav-link {{ request()->is('admin/tags*') ? 'active' : '' }}"
+                                    href="{{ route('admin.tags.index') }}">
+                                    <i class="fas fa-tags me-1"></i> Kelola Tag
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->is('admin/users*') ? 'active' : '' }}"
+                                    href="{{ route('admin.users.index') }}">
+                                    <i class="fas fa-users me-1"></i> Kelola User
                                 </a>
                             </li>
                         @else
