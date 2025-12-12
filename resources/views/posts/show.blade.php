@@ -2,6 +2,22 @@
 
 @section('content')
     <div class="container py-5">
+        <!-- Success Messages -->
+        @if (session('success'))
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ session('success') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
+        <!-- Error Messages -->
+        @if (session('error'))
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                {{ session('error') }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        @endif
+
         <div class="row">
             <div class="col-lg-8">
                 <article class="mb-5">
@@ -324,6 +340,24 @@
     </style>
 
     <script>
+        // Auto-scroll to comments section if success message exists
+        document.addEventListener('DOMContentLoaded', function() {
+            // Check if there's a success message
+            const successAlert = document.querySelector('.alert-success');
+            if (successAlert) {
+                // Scroll to comments section after a short delay
+                setTimeout(() => {
+                    const commentsSection = document.querySelector('.comments-section');
+                    if (commentsSection) {
+                        commentsSection.scrollIntoView({
+                            behavior: 'smooth',
+                            block: 'start'
+                        });
+                    }
+                }, 1000); // Wait 1 second for alert to be visible
+            }
+        });
+
         function toggleReplyForm(commentId) {
             const replyForm = document.getElementById('reply-form-' + commentId);
             replyForm.style.display = replyForm.style.display === 'none' ? 'block' : 'none';

@@ -6,11 +6,13 @@ use App\Models\Post;
 use App\Models\Categorie;
 use App\Models\SubCategorie;
 use App\Models\Tag;
+use App\Exports\PostsExport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Facades\Excel;
 
 /*
 |--------------------------------------------------------------------------
@@ -164,7 +166,7 @@ class PostController extends Controller
         // - content: wajib, string (tidak ada batas panjang)
         // - category_id: wajib, harus ada di tabel categories
         // - subcategory_id: wajib, harus ada di tabel sub_categories
-        // - image: wajib, harus gambar, format tertentu, max 2MB
+        // - image: wajib, harus gambar, format tertentu, max 2MBs
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
@@ -694,5 +696,31 @@ class PostController extends Controller
         $post->forceDelete();
         return redirect()->route('admin.posts.trash')
             ->with('success', 'Artikel berhasil dihapus permanen!');
+    }
+
+    /**
+     * Remove the specified post from storage (Admin only)
+     * Admin dapat menghapus artikel apapun tanpa batasan kepemilikan
+     */
+    public function adminDestroy(Post $post)
+    {
+        // CLEANUP - Hapus gambar terkait jika ada
+        if ($post->image) {
+            Storage::delete('public/' . $post->image);
+        }
+
+        // SOFT DELETE ARTIKEL
+        $post->delete();
+
+        return redirect()->route('admin.posts.index')
+            ->with('success', 'Artikel berhasil dipindahkan ke tempat sampah !');
+    }
+
+    /**
+     * Export posts to Excel
+     */
+    public function export()
+    {
+        return Excel::download(new PostsExport(), 'data-artikel-' . date('d-m-Y-H-i') . '.xlsx');
     }
 }

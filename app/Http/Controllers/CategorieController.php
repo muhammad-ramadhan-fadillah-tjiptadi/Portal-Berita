@@ -145,13 +145,53 @@ class CategorieController extends Controller
     }
 
     /**
+     * Check if category can be deleted (AJAX endpoint)
+     */
+    public function checkDelete(Categorie $categorie)
+    {
+        $postsCount = $categorie->posts()->count();
+        $subCategoriesCount = $categorie->subCategories()->count();
+
+        $canDelete = $postsCount === 0 && $subCategoriesCount === 0;
+
+        $message = '';
+        if ($postsCount > 0 && $subCategoriesCount > 0) {
+            $message = "Kategori tidak dapat dihapus karena memiliki {$postsCount} artikel dan {$subCategoriesCount} subkategori";
+        } elseif ($postsCount > 0) {
+            $message = "Kategori tidak dapat dihapus karena memiliki {$postsCount} artikel";
+        } elseif ($subCategoriesCount > 0) {
+            $message = "Kategori tidak dapat dihapus karena memiliki {$subCategoriesCount} subkategori";
+        }
+
+        return response()->json([
+            'canDelete' => $canDelete,
+            'message' => $message,
+            'postsCount' => $postsCount,
+            'subCategoriesCount' => $subCategoriesCount
+        ]);
+    }
+
+    /**
      * Remove the specified category from storage.
      */
     public function destroy(Categorie $categorie)
     {
-        if ($categorie->posts()->count() > 0) {
+        $postsCount = $categorie->posts()->count();
+        $subCategoriesCount = $categorie->subCategories()->count();
+
+        if ($postsCount > 0 && $subCategoriesCount > 0) {
             return redirect()->back()
-                ->with('error', 'Tidak dapat menghapus kategori yang memiliki artikel');
+                ->with('error', "Tidak dapat menghapus kategori karena memiliki {$postsCount} artikel dan {$subCategoriesCount} subkategori");
+        }
+
+        if ($postsCount > 0) {
+            return redirect()->back()
+                ->with('error', "Tidak dapat menghapus kategori karena memiliki {$postsCount} artikel");
+        }
+
+        if ($subCategoriesCount > 0) {
+            return redirect()->back()
+                ->with('error', "Tidak dapat menghapus kategori karena memiliki {$subCategoriesCount} subkategori");
         }
 
         $categorie->delete();

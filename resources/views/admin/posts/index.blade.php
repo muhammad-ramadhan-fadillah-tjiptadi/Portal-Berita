@@ -81,6 +81,9 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h3>Data Artikel</h3>
             <div class="d-flex gap-2">
+                <a href="{{ route('admin.posts.export') }}" class="btn btn-alert-success">
+                    <i class="fas fa-file-excel me-1"></i> Export Excel
+                </a>
                 <a href="{{ route('admin.posts.trash') }}" class="btn btn-alert-warning">
                     <i class="fas fa-trash"></i> Tempat Sampah
                 </a>
@@ -135,8 +138,7 @@
                         <form action="{{ route('admin.posts.destroy', $post) }}" method="POST" class="d-inline">
                             @csrf
                             @method('DELETE')
-                            <button type="submit" class="btn btn-sm btn-alert-danger"
-                                onclick="return confirm('Yakin ingin menghapus artikel ini?')">
+                            <button type="submit" class="btn btn-sm btn-alert-danger">
                                 <i class="fas fa-trash"></i> Hapus
                             </button>
                         </form>

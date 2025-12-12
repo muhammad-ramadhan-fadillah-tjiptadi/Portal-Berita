@@ -128,7 +128,7 @@
                                     <i class="fas fa-arrow-left me-1"></i> Kembali
                                 </a>
                                 <div class="d-flex gap-2">
-                                    <button type="submit" name="publish" value="0" class="btn-alert-primary">
+                                    <button type="submit" class="btn-alert-primary">
                                         <i class="fas fa-save me-1"></i> Simpan Perubahan
                                     </button>
                                     @if ($post->status !== 'published')

@@ -92,11 +92,12 @@ Route::middleware('isAdmin')->group(function () {
         // Manajemen Posts - CRUD lengkap untuk admin
         Route::prefix('posts')->name('posts.')->group(function () {
             Route::get('/', [\App\Http\Controllers\PostController::class, 'adminIndex'])->name('index');
+            Route::get('/export', [\App\Http\Controllers\PostController::class, 'export'])->name('export');
             Route::get('/create', [\App\Http\Controllers\PostController::class, 'create'])->name('create');
             Route::post('/', [\App\Http\Controllers\PostController::class, 'store'])->name('store');
             Route::get('/{post}/edit', [\App\Http\Controllers\PostController::class, 'edit'])->name('edit');
             Route::put('/{post}', [\App\Http\Controllers\PostController::class, 'update'])->name('update');
-            Route::delete('/{post}', [\App\Http\Controllers\PostController::class, 'destroy'])->name('destroy');
+            Route::delete('/{post}', [\App\Http\Controllers\PostController::class, 'adminDestroy'])->name('destroy');
             Route::get('/trash', [\App\Http\Controllers\PostController::class, 'trash'])->name('trash');
             Route::post('/trash/{post}/restore', [\App\Http\Controllers\PostController::class, 'restore'])->name('restore');
             Route::delete('/trash/{post}/force-delete', [\App\Http\Controllers\PostController::class, 'forceDelete'])->name('force-delete');
@@ -110,6 +111,7 @@ Route::middleware('isAdmin')->group(function () {
             Route::get('/{categorie}/edit', [\App\Http\Controllers\CategorieController::class, 'edit'])->name('edit');
             Route::put('/{categorie}', [\App\Http\Controllers\CategorieController::class, 'update'])->name('update');
             Route::delete('/{categorie}', [\App\Http\Controllers\CategorieController::class, 'destroy'])->name('destroy');
+            Route::get('/{categorie}/check-delete', [\App\Http\Controllers\CategorieController::class, 'checkDelete'])->name('check-delete');
             // Manajemen Soft Delete (Sistem Trash)
             Route::get('/trash', [\App\Http\Controllers\CategorieController::class, 'trash'])->name('trash');
             Route::patch('/{categorie}/restore', [\App\Http\Controllers\CategorieController::class, 'restore'])->name('restore');
